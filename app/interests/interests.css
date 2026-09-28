@@ -1,0 +1,561 @@
+.interests-detail .detail-composition {
+  width: min(100%, 1130px);
+  gap: clamp(38px, 5vw, 74px);
+}
+
+.interests-detail .detail-stage { padding: 20px 0 34px; }
+
+.interests-art {
+  position: relative;
+  flex: none;
+  width: min(500px, 43vw, calc((100svh - 182px) * .8));
+  aspect-ratio: 1122 / 1402;
+}
+
+.interests-cart {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+.interests-stall-back {
+  z-index: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 59.01%, 0 61.94%);
+}
+.interests-stall-lower {
+  z-index: 0;
+  clip-path: polygon(0 63.36%, 100% 60.44%, 100% 100%, 0 100%);
+}
+.interests-stall-front {
+  z-index: 2;
+  /* A thin strip of the supplied counter keeps food on the tabletop. */
+  clip-path: polygon(0 61.94%, 100% 59.01%, 100% 60.44%, 0 63.36%);
+}
+
+.interests-object {
+  position: absolute;
+  display: block;
+  left: var(--anchor-x);
+  top: var(--anchor-y);
+  width: var(--object-width);
+  aspect-ratio: var(--object-ratio);
+  transform: translate(var(--origin-x, -50%), var(--origin-y));
+  padding: 0;
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 45%;
+}
+
+.interests-object img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, 100%);
+  transition: transform .42s ease, filter .42s ease;
+}
+
+.interests-object:hover img,
+.interests-object:focus-visible img,
+.interests-object.is-preview img { filter: brightness(1.035); }
+.interests-object.is-active img { filter: brightness(1.055); }
+.interests-object:focus-visible { outline: 1px solid #8f9c91; outline-offset: 2px; }
+
+/* The balloon's string ends on the left post. Food anchors and their image
+   contact points are calculated from the shared counter line in the scene. */
+.interests-object-balloon {
+  left: 7.5%; top: 19%; width: 26%; height: 34%;
+  aspect-ratio: auto;
+  transform: none;
+  z-index: 4;
+}
+.interests-object-popcorn {
+  --object-width: 15%; --object-ratio: 1;
+}
+.interests-object-soda {
+  --object-width: 17%; --object-ratio: 1;
+}
+.interests-object-ice-cream {
+  --object-width: 15.3%; --object-ratio: 1;
+}
+.interests-object-hotdog {
+  --object-width: 19.7%; --object-ratio: 1448 / 1086;
+}
+
+.interests-object-popcorn:hover img,
+.interests-object-popcorn:focus-visible img { transform: translateY(-2px); }
+.interests-object-soda:hover img,
+.interests-object-soda:focus-visible img { transform: scale(1.02); }
+.interests-object-ice-cream:hover img,
+.interests-object-ice-cream:focus-visible img { transform: scale(1.02); }
+.interests-object-hotdog:hover img,
+.interests-object-hotdog:focus-visible img { transform: translateY(-2px); }
+
+/* The three supplied images keep their original 1122 × 1402 canvas. Their
+   artwork is offset within that canvas, so these two fixed transforms align
+   the rope knot and flag root with the stall; neither depends on viewport. */
+.interests-balloons-placement,
+.interests-flag-placement {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.interests-balloons-placement {
+  z-index: 3;
+  transform: translate(2.23%, 17.9%) scale(.36);
+}
+.interests-flag-placement {
+  z-index: 4;
+  transform: translate(48.4%, -2.9%) scale(.36);
+}
+.interests-balloons-layer,
+.interests-flag-layer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  animation: interests-shared-wind 1.7s ease-in-out infinite alternate;
+}
+.interests-balloons-layer {
+  transform-origin: 59.4% 94.9%;
+  --wind-start: -3deg;
+  --wind-end: 3deg;
+  --wind-stretch-start: 1;
+  --wind-stretch-end: 1;
+  transition: filter .3s ease;
+}
+.interests-balloons-placement.is-emphasized .interests-balloons-layer {
+  filter: brightness(1.035);
+}
+.interests-flag-layer {
+  /* The supplied flag includes a narrow pole fragment; the base owns the pole. */
+  clip-path: inset(0 0 0 41%);
+  transform-origin: 41.4% 30%;
+  --wind-start: -3deg;
+  --wind-end: 4deg;
+  --wind-stretch-start: .985;
+  --wind-stretch-end: 1.015;
+}
+@keyframes interests-shared-wind {
+  from { transform: rotate(var(--wind-start)) scaleX(var(--wind-stretch-start)); }
+  to { transform: rotate(var(--wind-end)) scaleX(var(--wind-stretch-end)); }
+}
+
+.interests-directory { width: min(440px, 38vw); }
+.interests-directory .directory-entry { padding: 12px 0 13px; }
+.interests-directory .directory-english { font-size: clamp(22px, 1.9vw, 27px); }
+.interests-directory .directory-summary { margin-top: 4px; }
+
+@media (max-width: 850px) {
+  .interests-detail .detail-stage { padding-top: 8px; }
+  .interests-detail .detail-composition { gap: 12px; }
+  .interests-art { width: min(100%, 440px); }
+  .interests-directory { width: min(100%, 540px); }
+}
+
+@media (max-width: 550px) {
+  .interests-art { width: min(95%, 410px); }
+  .interests-directory .directory-entry { padding: 15px 0 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interests-object img { transition: none; }
+  .interests-balloons-layer,
+  .interests-flag-layer { animation: none; transition: none; }
+  .interests-object:hover img,
+  .interests-object:focus-visible img { transform: none; }
+}
+
+/* The reading view remains inside Interests; the stall stays mounted below it. */
+.interests-focus-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--background);
+}
+
+.interests-focus-stage {
+  position: relative;
+  width: min(calc(100% - 148px), 1320px);
+  height: 100svh;
+  margin: 0 auto;
+  padding: 28px 0 26px;
+}
+
+.interests-page {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  row-gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.interests-page-heading { margin: 0; }
+.interests-page-count {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--type-muted);
+}
+.interests-page-title.type-section-title {
+  margin: 0;
+  font-family: var(--editorial-mixed);
+  font-size: 20px;
+  font-weight: var(--type-medium-weight);
+  line-height: 1.3;
+  color: var(--type-heading);
+  letter-spacing: 0;
+}
+.interests-page-subtitle.type-primary-text {
+  margin: 3px 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--type-accent);
+}
+.interests-page-personal.type-body-text {
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: var(--type-primary-size);
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--type-body-color);
+  text-align: center;
+}
+
+.interests-page.is-entering-right { animation: interests-enter-right 300ms ease-out both; }
+.interests-page.is-entering-left { animation: interests-enter-left 300ms ease-out both; }
+.interests-page.is-leaving-left,
+.interests-page.is-leaving-right {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.interests-page.is-leaving-left { animation: interests-leave-left 300ms ease-out both; }
+.interests-page.is-leaving-right { animation: interests-leave-right 300ms ease-out both; }
+@keyframes interests-enter-right { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes interests-enter-left { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes interests-leave-left { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-16px); } }
+@keyframes interests-leave-right { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(16px); } }
+
+.interests-page-arrow {
+  position: fixed;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  padding: 8px 12px;
+  color: var(--type-accent);
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1;
+  opacity: .68;
+  cursor: pointer;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.interests-page-arrow:hover,
+.interests-page-arrow:focus-visible { opacity: 1; }
+.interests-page-arrow:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
+.interests-page-arrow-prev { left: clamp(12px, 2.8vw, 52px); }
+.interests-page-arrow-next { right: clamp(12px, 2.8vw, 52px); }
+
+.interests-travel-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 3vw, 48px);
+  align-items: center;
+  align-self: center;
+  height: min(60svh, 540px);
+  min-height: 0;
+}
+.interests-travel-map {
+  align-self: center;
+  min-width: 0;
+}
+.interests-travel-map > img { display: block; width: 100%; height: auto; object-fit: contain; }
+.interests-travel-places {
+  margin-top: 8px;
+  color: var(--type-muted);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.interests-travel-places span { display: block; }
+
+.interests-taped-photo { position: relative; }
+.interests-taped-photo::before,
+.interests-taped-photo::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: clamp(13px, 22%, 25px);
+  height: 8px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(216 205 179 / .54), rgb(242 234 213 / .76) 48%, rgb(211 201 180 / .57));
+  box-shadow: 0 0 0 .4px rgb(127 116 95 / .1);
+}
+.interests-taped-photo::before { top: -3px; left: -6px; transform: rotate(-32deg); }
+.interests-taped-photo::after { right: -6px; bottom: -3px; transform: rotate(-32deg); opacity: .88; }
+.interests-taped-photo:nth-child(even)::before { transform: rotate(-29deg); opacity: .9; }
+.interests-taped-photo:nth-child(even)::after { transform: rotate(-35deg); }
+
+.interests-photo { display: block; padding: 0; text-align: left; cursor: zoom-in; }
+.interests-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
+.interests-photo:focus-visible { outline: 1px solid var(--type-accent); outline-offset: 4px; }
+.interests-photo-field-travel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.interests-photo-field-travel .interests-photo {
+  position: absolute;
+  --photo-tilt: 0deg;
+  transform: rotate(var(--photo-tilt));
+  transition: transform 250ms ease, opacity 250ms ease;
+}
+.interests-photo-field-travel .interests-photo:nth-child(2) { --photo-tilt: -1deg; }
+.interests-photo-field-travel .interests-photo:nth-child(6) { --photo-tilt: 1deg; }
+.interests-photo-field-travel .interests-photo:nth-child(9) { --photo-tilt: -.7deg; }
+.interests-photo-field-travel .interests-photo:hover,
+.interests-photo-field-travel .interests-photo:focus-visible { z-index: 1; transform: rotate(var(--photo-tilt)) scale(1.015); }
+
+.interests-photo-field-exhibitions {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  height: min(60svh, 540px);
+}
+.interests-photo-field-exhibitions .interests-photo {
+  position: absolute;
+  --photo-tilt: 0deg;
+  transform: rotate(var(--photo-tilt));
+  transition: transform 250ms ease;
+}
+.interests-photo-field-exhibitions .interests-photo:nth-child(3) { --photo-tilt: -.8deg; }
+.interests-photo-field-exhibitions .interests-photo:nth-child(8) { --photo-tilt: .9deg; }
+.interests-photo-field-exhibitions .interests-photo:nth-child(12) { --photo-tilt: -.7deg; }
+.interests-photo-field-exhibitions .interests-photo:hover,
+.interests-photo-field-exhibitions .interests-photo:focus-visible { transform: rotate(var(--photo-tilt)) scale(1.015); }
+
+.interests-photo-field-concerts {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  height: min(60svh, 540px);
+}
+.interests-photo-field-concerts .interests-photo {
+  position: absolute;
+  --photo-tilt: 0deg;
+  transform: rotate(var(--photo-tilt));
+  transition: transform 250ms ease;
+}
+.interests-photo-field-concerts .interests-photo:nth-child(2) { --photo-tilt: -.7deg; }
+.interests-photo-field-concerts .interests-photo:nth-child(8) { --photo-tilt: .8deg; }
+.interests-photo-field-concerts .interests-photo:hover,
+.interests-photo-field-concerts .interests-photo:focus-visible { z-index: 1; transform: rotate(var(--photo-tilt)) scale(1.015); }
+
+.interests-theater-wall {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  height: min(60svh, 540px);
+}
+.interests-theater-item {
+  position: absolute;
+  margin: 0;
+  --theater-tilt: 0deg;
+  transform: rotate(var(--theater-tilt));
+  transition: transform 250ms ease;
+}
+.interests-theater-item-2 { --theater-tilt: -.7deg; }
+.interests-theater-item-9 { --theater-tilt: .8deg; }
+.interests-theater-item-15 { --theater-tilt: -.6deg; }
+.interests-theater-item:hover,
+.interests-theater-item:focus-within { z-index: 1; transform: rotate(var(--theater-tilt)) scale(1.015); }
+.interests-theater-photo { display: block; width: 100%; padding: 0; cursor: zoom-in; }
+.interests-theater-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
+.interests-theater-photo:focus-visible { outline: 1px solid var(--type-accent); outline-offset: 4px; }
+.interests-theater-caption {
+  display: block;
+  margin-top: 4px;
+  color: var(--type-muted);
+  font-family: var(--editorial-mixed);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-align: center;
+}
+.interests-theater-caption .is-foreign { font-style: italic; }
+
+.interests-new-things-wall {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  height: min(60svh, 540px);
+}
+.interests-new-things-group { position: absolute; margin: 0; }
+.interests-new-things-frame { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
+.interests-new-things-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.interests-new-things-group-skydiving { left: .5%; top: 8%; width: 18%; }
+.interests-new-things-group-pottery { left: 23%; top: 0; width: 12%; }
+.interests-new-things-group-whale { left: 41%; top: 7%; width: 29%; display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 3.5%; }
+.interests-new-things-frame-whale-0 { width: 58.6%; }
+.interests-new-things-frame-whale-1 { width: 37.9%; margin-top: 7%; }
+.interests-new-things-group-hiking { left: 81%; top: 4%; width: 13%; }
+.interests-new-things-group-dogs { left: 1%; top: 58%; width: 19%; }
+.interests-new-things-group-bread { left: 29%; top: 53%; width: 11.5%; }
+.interests-new-things-group-kayaking { left: 49%; top: 54%; width: 12%; }
+.interests-new-things-group-snorkeling { left: 70%; top: 54%; width: 15%; }
+.interests-new-things-label {
+  display: block;
+  width: 100%;
+  margin: 6px 0 0;
+  color: var(--type-muted);
+  font-family: var(--editorial-mixed);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.interests-new-things-group-whale .interests-new-things-label { text-align: center; }
+.interests-page-hotdog .interests-page-personal.type-body-text { font-size: calc(var(--type-primary-size) + 1px); }
+
+.interests-coming-soon {
+  display: flex;
+  align-items: center;
+  min-height: 45svh;
+  color: var(--type-muted);
+  font-family: var(--english);
+  font-size: var(--type-primary-size);
+  font-weight: 400;
+}
+.interests-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 5vh 5vw;
+  background: rgb(51 50 45 / .52);
+  cursor: zoom-out;
+}
+.interests-lightbox-image { max-width: 100%; max-height: 100%; cursor: default; }
+.interests-lightbox-image img {
+  display: block;
+  max-width: min(90vw, 1300px);
+  max-height: 90svh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .interests-focus-stage { width: calc(100% - 80px); height: auto; min-height: 100svh; padding: 46px 0 76px; }
+  .interests-page { display: block; min-height: calc(100svh - 122px); }
+  .interests-page-heading { margin-bottom: 28px; }
+  .interests-page.is-leaving-left,
+  .interests-page.is-leaving-right { top: 46px; }
+  .interests-travel-content { display: block; height: auto; }
+  .interests-travel-map { width: min(100%, 620px); margin: 0 auto 30px; }
+  .interests-photo-field-travel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    height: auto;
+  }
+  .interests-photo-field-travel .interests-photo { position: static; flex: 0 0 calc(50% - 12px); }
+  .interests-photo-field-exhibitions {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: 24px;
+    row-gap: 30px;
+    height: auto;
+  }
+  .interests-photo-field-exhibitions .interests-photo { position: static; flex: 0 1 28%; }
+  .interests-photo-field-concerts {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    height: auto;
+  }
+  .interests-photo-field-concerts .interests-photo { position: static; flex: 0 1 28%; }
+  .interests-theater-wall {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    height: auto;
+  }
+  .interests-theater-item { position: static; flex: 0 1 22%; }
+  .interests-new-things-wall {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    height: auto;
+  }
+  .interests-new-things-group { position: static; flex: 0 1 22%; margin: 0; }
+  .interests-new-things-label { white-space: normal; }
+  .interests-new-things-group-whale .interests-new-things-label { flex-basis: 100%; }
+  .interests-page-personal.type-body-text { margin-top: 38px; }
+}
+
+@media (max-width: 600px) {
+  .interests-focus-stage { width: calc(100% - 36px); padding: 35px 0 95px; }
+  .interests-page.is-leaving-left,
+  .interests-page.is-leaving-right { top: 35px; }
+  .interests-page-heading { margin-bottom: 28px; }
+  .interests-page-personal.type-body-text { font-size: 15px; }
+  .interests-page-arrow { top: auto; bottom: 16px; transform: none; font-size: 38px; }
+  .interests-page-arrow-prev { left: 16px; }
+  .interests-page-arrow-next { right: 16px; }
+  .interests-photo-field-exhibitions { column-gap: 18px; row-gap: 26px; }
+  .interests-photo-field-exhibitions .interests-photo { flex: 0 1 calc(50% - 9px); min-width: 0; }
+  .interests-photo-field-concerts { column-gap: 18px; row-gap: 26px; }
+  .interests-photo-field-concerts .interests-photo { flex: 0 1 calc(50% - 9px); min-width: 0; }
+  .interests-theater-wall { column-gap: 18px; row-gap: 26px; }
+  .interests-theater-item { flex: 0 1 calc(50% - 9px); min-width: 0; }
+  .interests-new-things-wall { column-gap: 18px; row-gap: 26px; }
+  .interests-new-things-group { flex: 0 1 calc(50% - 9px); min-width: 0; }
+  .interests-page-hotdog .interests-page-personal.type-body-text { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interests-page.is-entering-right,
+  .interests-page.is-entering-left,
+  .interests-page.is-leaving-left,
+  .interests-page.is-leaving-right { animation: none; }
+  .interests-photo-field-travel .interests-photo,
+  .interests-photo-field-exhibitions .interests-photo,
+  .interests-photo-field-concerts .interests-photo,
+  .interests-theater-item,
+  .interests-page-arrow { transition: none; }
+}

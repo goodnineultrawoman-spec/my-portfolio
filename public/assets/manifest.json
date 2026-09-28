@@ -1,0 +1,92 @@
+[
+  {
+    "source": "主视觉参考.png",
+    "url": "/assets/illustrations/map-reference.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "旋转木马",
+    "url": "/assets/illustrations/carousel.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "过山车整体",
+    "url": "/assets/illustrations/roller-coaster.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "摩天轮总体",
+    "url": "/assets/illustrations/ferris-wheel.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "零食车",
+    "url": "/assets/illustrations/snack-cart.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "電話亭",
+    "url": "/assets/illustrations/contact-pavilion.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "纪念品商店",
+    "url": "/assets/illustrations/souvenir-shop.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "冰激凌",
+    "url": "/assets/illustrations/ice-cream.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "可乐",
+    "url": "/assets/illustrations/soda.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "爆米花",
+    "url": "/assets/illustrations/popcorn.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "热狗",
+    "url": "/assets/illustrations/hot-dog.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "旋转木马顶",
+    "url": "/assets/layers/carousel-canopy.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "旋转木马马",
+    "url": "/assets/layers/carousel-horses.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "摩天轮部件",
+    "url": "/assets/layers/ferris-parts.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "过山车轨道",
+    "url": "/assets/layers/coaster-track.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "过山车车厢",
+    "url": "/assets/layers/coaster-train.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "零食车车体",
+    "url": "/assets/layers/snack-cart-body.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  },
+  {
+    "source": "气球",
+    "url": "/assets/layers/balloons.png",
+    "treatment": "Byte-for-byte copy; original pixels and alpha preserved."
+  }
+]

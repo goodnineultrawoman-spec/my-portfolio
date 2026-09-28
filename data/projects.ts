@@ -1,0 +1,8 @@
+export type Project = { id: string; title: string; category: string; role: string; description: string; color: string; initials: string; sections: {title:string; body:string}[] };
+export const projects: Project[] = [
+ { id:'market-entry', title:'让一个品牌走向新市场', category:'Market entry · GTM', role:'市场研究 / 策略规划', description:'从文化语境与消费者需求出发，整理品牌进入新市场的机会与路径。', color:'#aabac3', initials:'01', sections:[{title:'背景与问题',body:'在这里描述项目背景、目标市场和需要解决的业务问题。'},{title:'研究与判断',body:'补充研究方法、关键洞察，以及它们如何影响你的策略选择。'},{title:'我的贡献',body:'说明你独立负责的工作、协作方式与交付物。'},{title:'结果与反思',body:'补充可核实的数据、成果或下一次会改进的地方。'}]},
+ { id:'brand-story', title:'把品牌故事讲得更清楚', category:'Brand · Communication', role:'品牌策略 / 内容策划', description:'梳理品牌价值、受众与表达，让每一次沟通传递一致而清晰的信息。', color:'#a7b09b', initials:'02', sections:[{title:'项目目标',body:'说明这次品牌沟通面临的挑战与目标受众。'},{title:'策略与表达',body:'补充定位思路、信息架构、内容主题与渠道选择。'},{title:'执行与复盘',body:'在这里展示可公开的产出、反馈和你的思考。'}]},
+ { id:'campaign', title:'从一个洞察到一次传播', category:'Campaign · Activation', role:'Campaign 策划 / 项目协作', description:'围绕一个真实的用户需求，连接创意、渠道与落地执行。', color:'#d5a49a', initials:'03', sections:[{title:'用户洞察',body:'补充目标用户、洞察来源与传播机会。'},{title:'创意与落地',body:'记录核心创意、执行节奏和你负责的部分。'},{title:'项目成果',body:'补充经过核实的传播表现、业务反馈或学习。'}]},
+ { id:'research', title:'跨文化消费者观察', category:'Research · Insight', role:'研究 / 洞察整理', description:'以访谈与案头研究为起点，理解不同市场中的需求和语境。', color:'#aaa883', initials:'04', sections:[{title:'研究问题',body:'补充真实的研究问题、样本与方法。'},{title:'关键观察',body:'记录经过核实的发现及其对策略的启发。'}]},
+ { id:'launch', title:'一次产品上市计划', category:'Launch · GTM', role:'GTM / 上市协作', description:'把目标人群、核心信息和上市节奏整理成可执行的计划。', color:'#ddd0a5', initials:'05', sections:[{title:'任务与目标',body:'补充产品、市场与上市目标。'},{title:'行动与结果',body:'说明你负责的部分和可公开的结果。'}]},
+];

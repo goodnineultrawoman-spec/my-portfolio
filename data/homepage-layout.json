@@ -1,0 +1,111 @@
+{
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "base": "../01-environment/environment-base.png",
+  "background": "white",
+  "coordinates": "destination_xy is top-left of the homepage-fit PNG, before uniform_scale",
+  "layers_bottom_to_top": [
+    {
+      "name": "过山车",
+      "file": "03-roller-coaster/coaster-home.png",
+      "source": "过山车整体",
+      "source_crop_xyxy": [
+        78,
+        116,
+        1399,
+        956
+      ],
+      "uniform_scale": 0.34,
+      "destination_xy": [
+        699,
+        104
+      ],
+      "destination_size": [
+        449,
+        286
+      ]
+    },
+    {
+      "name": "摩天轮",
+      "file": "04-ferris-wheel/ferris-home.png",
+      "source": "摩天轮总体",
+      "source_crop_xyxy": [
+        363,
+        24,
+        1174,
+        1001
+      ],
+      "uniform_scale": 0.31,
+      "destination_xy": [
+        1195,
+        265
+      ],
+      "destination_size": [
+        251,
+        303
+      ]
+    },
+    {
+      "name": "旋转木马",
+      "file": "02-carousel/carousel-home.png",
+      "source": "旋转木马",
+      "source_crop_xyxy": [
+        186,
+        47,
+        1058,
+        1119
+      ],
+      "uniform_scale": 0.23,
+      "destination_xy": [
+        226,
+        370
+      ],
+      "destination_size": [
+        201,
+        247
+      ]
+    },
+    {
+      "name": "零食铺",
+      "file": "05-snack-stall/snack-home.png",
+      "source": "零食车",
+      "source_crop_xyxy": [
+        88,
+        107,
+        1068,
+        1308
+      ],
+      "uniform_scale": 0.18,
+      "destination_xy": [
+        775,
+        550
+      ],
+      "destination_size": [
+        176,
+        216
+      ]
+    },
+    {
+      "name": "联系亭",
+      "file": "06-contact/contact-home.png",
+      "source": "電話亭",
+      "source_crop_xyxy": [
+        117,
+        66,
+        1025,
+        1328
+      ],
+      "uniform_scale": 0.175,
+      "destination_xy": [
+        1315,
+        670
+      ],
+      "destination_size": [
+        159,
+        221
+      ]
+    }
+  ]
+}
