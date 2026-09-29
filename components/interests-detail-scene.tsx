@@ -41,7 +41,7 @@ function PhotoField({
       style={photoRatioStyle(photo)}
       aria-label={`放大${photo.alt}`}
       onClick={event => onOpen(photo, event.currentTarget)}
-    ><img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/></button>)}
+    ><img src={photo.previewSrc} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" draggable={false}/></button>)}
   </div>;
 }
 
@@ -52,7 +52,7 @@ function TheaterWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLB
       className={`interests-theater-item interests-theater-item-${photo.id}`}
     >
       <button type="button" className="interests-theater-photo interests-taped-photo" style={photoRatioStyle(photo)} aria-label={`放大${photo.alt}`} onClick={event => onOpen(photo, event.currentTarget)}>
-        <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/>
+        <img src={photo.previewSrc} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" draggable={false}/>
       </button>
       <figcaption className="interests-theater-caption type-meta-text"><span className={photo.foreign ? 'is-foreign' : undefined}>{photo.title}</span> / {photo.place}</figcaption>
     </figure>)}
@@ -68,7 +68,7 @@ function ConcertWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLB
       style={photoRatioStyle(photo)}
       aria-label="放大演唱会照片"
       onClick={event => onOpen(photo, event.currentTarget)}
-    ><img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/></button>)}
+    ><img src={photo.previewSrc} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" draggable={false}/></button>)}
   </div>;
 }
 
@@ -78,11 +78,12 @@ function NewThingsWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTM
       {activity.photos.map((photo, index) => <button key={photo.src} type="button" className={`interests-new-things-frame interests-new-things-frame-${activity.id}-${index} interests-taped-photo`} style={photoRatioStyle(photo)} aria-label={`放大${activity.label}照片`} onClick={event => onOpen(photo, event.currentTarget)}>
         <img
           className="interests-new-things-photo"
-          src={photo.src}
+          src={photo.previewSrc}
           alt={photo.alt}
           width={photo.width}
           height={photo.height}
           loading="lazy"
+          decoding="async"
           draggable={false}
         />
       </button>)}
@@ -307,7 +308,7 @@ export function InterestsDetailScene() {
       onClick={event => { event.stopPropagation(); if (event.target === event.currentTarget) closeLightbox(); }}
     >
       <div ref={lightboxRef} className="interests-lightbox-image" role="dialog" aria-modal="true" aria-label={lightboxPhoto.alt} tabIndex={-1} onClick={event => event.stopPropagation()}>
-        <img src={lightboxPhoto.src} alt={lightboxPhoto.alt} width={lightboxPhoto.width} height={lightboxPhoto.height}/>
+        <img src={lightboxPhoto.src} alt={lightboxPhoto.alt} width={lightboxPhoto.width} height={lightboxPhoto.height} decoding="async"/>
       </div>
     </div>}
   </main>;

@@ -64,11 +64,11 @@ export const ferrisProjects: FerrisProject[] = [
 export const photographyAlbums = {
   portraits: {
     english: 'PORTRAITS', chinese: '人像',
-    images: Array.from({ length: 12 }, (_, index) => assetRoot + '/portraits/' + (index + 1) + '.jpg'),
+    images: Array.from({ length: 12 }, (_, index) => assetRoot + '/portraits-web/' + (index + 1) + '.webp'),
   },
   landscapes: {
     english: 'LANDSCAPES', chinese: '风景',
-    images: Array.from({ length: 12 }, (_, index) => assetRoot + '/landscapes/' + (index + 1) + (index === 4 ? '.png' : '.jpg')),
+    images: Array.from({ length: 12 }, (_, index) => assetRoot + '/landscapes-web/' + (index + 1) + '.webp'),
   },
 } as const;
 

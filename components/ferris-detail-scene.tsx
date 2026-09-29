@@ -11,12 +11,14 @@ export function FerrisDetailScene() {
   const [previewId, setPreviewId] = useState<FerrisProjectId | null>(null);
   const [gallery, setGallery] = useState<PhotographyAlbumId | null>(null);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [galleryPhotoLoaded, setGalleryPhotoLoaded] = useState(false);
   const [switchDirection, setSwitchDirection] = useState<'next' | 'previous' | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const focusedRef = useRef<HTMLElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const adjacentPhotosRef = useRef(new Map<string, HTMLImageElement>());
 
   const closeProject = useCallback(() => {
     if (!activeId) return;
@@ -32,6 +34,7 @@ export function FerrisDetailScene() {
     if (!gallery) return;
     const previousGallery = gallery;
     setGallery(null);
+    adjacentPhotosRef.current.clear();
     requestAnimationFrame(() => document.getElementById('work-album-' + previousGallery)?.focus());
   }, [gallery]);
 
@@ -47,9 +50,26 @@ export function FerrisDetailScene() {
   }, []);
 
   const album = gallery ? photographyAlbums[gallery] : null;
+  const preloadAdjacentPhotos = useCallback(() => {
+    if (!gallery) return;
+    const photos = photographyAlbums[gallery].images;
+    const neighbors = [photos[(photoIndex - 1 + photos.length) % photos.length], photos[(photoIndex + 1) % photos.length]];
+    const keep = new Set(neighbors);
+    const cache = adjacentPhotosRef.current;
+    for (const src of cache.keys()) if (!keep.has(src)) cache.delete(src);
+    for (const src of neighbors) {
+      if (cache.has(src)) continue;
+      const image = new window.Image();
+      image.decoding = 'async';
+      image.src = src;
+      cache.set(src, image);
+      void image.decode().catch(() => {});
+    }
+  }, [gallery, photoIndex]);
   const advancePhoto = useCallback((step: number) => {
     if (!gallery) return;
     const count = photographyAlbums[gallery].images.length;
+    setGalleryPhotoLoaded(false);
     setPhotoIndex(current => (current + step + count) % count);
   }, [gallery]);
 
@@ -104,6 +124,8 @@ export function FerrisDetailScene() {
   }
 
   function openGallery(id: PhotographyAlbumId) {
+    adjacentPhotosRef.current.clear();
+    setGalleryPhotoLoaded(false);
     setPhotoIndex(0);
     setGallery(id);
   }
@@ -270,7 +292,18 @@ export function FerrisDetailScene() {
               }
             }}
           >
-            <img key={album.images[photoIndex]} src={album.images[photoIndex]} alt={album.chinese + '摄影作品 ' + String(photoIndex + 1)} draggable={false}/>
+            {!galleryPhotoLoaded && <span className="work-gallery-loading" role="status">照片加载中…</span>}
+            <img
+              key={album.images[photoIndex]}
+              className={galleryPhotoLoaded ? 'is-loaded' : undefined}
+              src={album.images[photoIndex]}
+              alt={album.chinese + '摄影作品 ' + String(photoIndex + 1)}
+              fetchPriority="high"
+              decoding="async"
+              onLoad={() => { setGalleryPhotoLoaded(true); preloadAdjacentPhotos(); }}
+              onError={() => setGalleryPhotoLoaded(true)}
+              draggable={false}
+            />
           </div>
           <button type="button" className="work-gallery-arrow" aria-label="下一张" onClick={() => advancePhoto(1)}>→</button>
         </div>

@@ -1,8 +1,14 @@
 type PhotoFile = readonly [name: string, width: number, height: number];
 
+function webPhotoPath(folder: string, version: 'preview' | 'full', filename: string) {
+  const stem = filename.replace(/\.[^.]+$/, '');
+  return `/assets/interests/${folder}/${version}/${encodeURIComponent(stem)}.webp`;
+}
+
 function photoPaths(folder: 'travel' | 'exhibitions', files: readonly PhotoFile[]) {
   return files.map(([name, width, height], index) => ({
-    src: `/assets/interests/${folder}/${name}`,
+    src: webPhotoPath(folder, 'full', name),
+    previewSrc: webPhotoPath(folder, 'preview', name),
     width,
     height,
     alt: `${folder === 'travel' ? '旅途' : '看展'}照片 ${index + 1}`,
@@ -66,7 +72,8 @@ export const theaterPhotos = ([
   [18, 'Chicago', '马德里', 2000, 1191, true],
 ] satisfies readonly TheaterPhotoFile[]).map(([id, title, place, width, height, foreign]) => ({
   id,
-  src: `/assets/interests/theater/${id}.jpg`,
+  src: webPhotoPath('theater', 'full', `${id}.jpg`),
+  previewSrc: webPhotoPath('theater', 'preview', `${id}.jpg`),
   title,
   place,
   foreign,
@@ -89,7 +96,8 @@ export const concertPhotos = ([
   ['f0fa62f0470ca0a125cac3bb8190ebe1.jpg', 2200, 1650],
   ['f6a8cf8feed7eafd851ed3aa29360c62.jpg', 1630, 1133],
 ] as const).map(([filename, width, height]) => ({
-  src: `/assets/interests/concerts/${filename}`,
+  src: webPhotoPath('concerts', 'full', filename),
+  previewSrc: webPhotoPath('concerts', 'preview', filename),
   width,
   height,
   alt: '演唱会现场照片',
@@ -110,7 +118,8 @@ export const newThingsActivities = ([
   id,
   label,
   photos: photos.map(([filename, width, height]) => ({
-    src: `/assets/interests/new-things/${encodeURIComponent(filename)}`,
+    src: webPhotoPath('new-things', 'full', filename),
+    previewSrc: webPhotoPath('new-things', 'preview', filename),
     width,
     height,
     alt: label,
