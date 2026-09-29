@@ -312,83 +312,86 @@
 .interests-taped-photo:nth-child(even)::after { transform: rotate(-35deg); }
 
 .interests-photo { display: block; padding: 0; text-align: left; cursor: zoom-in; }
-.interests-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
+.interests-photo img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .interests-photo:focus-visible { outline: 1px solid var(--type-accent); outline-offset: 4px; }
-.interests-photo-field-travel {
-  position: relative;
+.interests-photo-field-travel,
+.interests-photo-field-exhibitions,
+.interests-photo-field-concerts,
+.interests-theater-wall,
+.interests-new-things-wall {
+  display: grid;
+  align-self: center;
   width: 100%;
-  height: 100%;
+  height: min(60svh, 540px);
+  min-width: 0;
+  min-height: 0;
+  column-gap: 16px;
+  row-gap: 16px;
 }
-.interests-photo-field-travel .interests-photo {
-  position: absolute;
+.interests-photo-field-travel { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); --wall-photo-height: calc((min(60svh, 540px) - 32px) * .333333); }
+.interests-photo-field-exhibitions { grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); --wall-photo-height: calc((min(60svh, 540px) - 16px) * .5); }
+.interests-photo-field-concerts { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); --wall-photo-height: calc((min(60svh, 540px) - 16px) * .5); }
+.interests-theater-wall { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); --wall-photo-height: calc((min(60svh, 540px) - 32px) * .333333 - 34px); }
+.interests-new-things-wall { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); --wall-photo-height: calc((min(60svh, 540px) - 16px) * .5 - 28px); }
+.interests-photo-field-travel .interests-photo,
+.interests-photo-field-exhibitions .interests-photo,
+.interests-photo-field-concerts .interests-photo {
+  place-self: center;
+  width: min(100%, calc(var(--wall-photo-height) * var(--photo-ratio)));
+  aspect-ratio: var(--photo-ratio);
   --photo-tilt: 0deg;
   transform: rotate(var(--photo-tilt));
   transition: transform 250ms ease, opacity 250ms ease;
 }
+.interests-photo-field-travel .interests-photo:nth-child(4n + 2),
+.interests-photo-field-exhibitions .interests-photo:nth-child(4n + 2),
+.interests-photo-field-concerts .interests-photo:nth-child(4n + 2) { justify-self: start; align-self: end; }
+.interests-photo-field-travel .interests-photo:nth-child(5n + 4),
+.interests-photo-field-exhibitions .interests-photo:nth-child(5n + 4),
+.interests-photo-field-concerts .interests-photo:nth-child(5n + 4) { justify-self: end; align-self: start; }
 .interests-photo-field-travel .interests-photo:nth-child(2) { --photo-tilt: -1deg; }
 .interests-photo-field-travel .interests-photo:nth-child(6) { --photo-tilt: 1deg; }
 .interests-photo-field-travel .interests-photo:nth-child(9) { --photo-tilt: -.7deg; }
-.interests-photo-field-travel .interests-photo:hover,
-.interests-photo-field-travel .interests-photo:focus-visible { z-index: 1; transform: rotate(var(--photo-tilt)) scale(1.015); }
-
-.interests-photo-field-exhibitions {
-  position: relative;
-  align-self: center;
-  width: 100%;
-  height: min(60svh, 540px);
-}
-.interests-photo-field-exhibitions .interests-photo {
-  position: absolute;
-  --photo-tilt: 0deg;
-  transform: rotate(var(--photo-tilt));
-  transition: transform 250ms ease;
-}
 .interests-photo-field-exhibitions .interests-photo:nth-child(3) { --photo-tilt: -.8deg; }
 .interests-photo-field-exhibitions .interests-photo:nth-child(8) { --photo-tilt: .9deg; }
 .interests-photo-field-exhibitions .interests-photo:nth-child(12) { --photo-tilt: -.7deg; }
-.interests-photo-field-exhibitions .interests-photo:hover,
-.interests-photo-field-exhibitions .interests-photo:focus-visible { transform: rotate(var(--photo-tilt)) scale(1.015); }
-
-.interests-photo-field-concerts {
-  position: relative;
-  align-self: center;
-  width: 100%;
-  height: min(60svh, 540px);
-}
-.interests-photo-field-concerts .interests-photo {
-  position: absolute;
-  --photo-tilt: 0deg;
-  transform: rotate(var(--photo-tilt));
-  transition: transform 250ms ease;
-}
 .interests-photo-field-concerts .interests-photo:nth-child(2) { --photo-tilt: -.7deg; }
 .interests-photo-field-concerts .interests-photo:nth-child(8) { --photo-tilt: .8deg; }
+.interests-photo-field-travel .interests-photo:hover,
+.interests-photo-field-travel .interests-photo:focus-visible,
+.interests-photo-field-exhibitions .interests-photo:hover,
+.interests-photo-field-exhibitions .interests-photo:focus-visible,
 .interests-photo-field-concerts .interests-photo:hover,
 .interests-photo-field-concerts .interests-photo:focus-visible { z-index: 1; transform: rotate(var(--photo-tilt)) scale(1.015); }
-
-.interests-theater-wall {
-  position: relative;
-  align-self: center;
-  width: 100%;
-  height: min(60svh, 540px);
-}
 .interests-theater-item {
-  position: absolute;
   margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   --theater-tilt: 0deg;
   transform: rotate(var(--theater-tilt));
   transition: transform 250ms ease;
 }
 .interests-theater-item-2 { --theater-tilt: -.7deg; }
 .interests-theater-item-9 { --theater-tilt: .8deg; }
-.interests-theater-item-15 { --theater-tilt: -.6deg; }
+.interests-theater-item:nth-child(4n + 2) { align-self: start; }
+.interests-theater-item:nth-child(5n + 4) { align-self: end; }
 .interests-theater-item:hover,
 .interests-theater-item:focus-within { z-index: 1; transform: rotate(var(--theater-tilt)) scale(1.015); }
-.interests-theater-photo { display: block; width: 100%; padding: 0; cursor: zoom-in; }
-.interests-theater-photo img { display: block; width: 100%; height: auto; object-fit: contain; }
+.interests-theater-photo {
+  display: block;
+  width: min(100%, calc(var(--wall-photo-height) * var(--photo-ratio)));
+  aspect-ratio: var(--photo-ratio);
+  padding: 0;
+  cursor: zoom-in;
+}
+.interests-theater-photo img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .interests-theater-photo:focus-visible { outline: 1px solid var(--type-accent); outline-offset: 4px; }
 .interests-theater-caption {
   display: block;
+  width: 100%;
   margin-top: 4px;
   color: var(--type-muted);
   font-family: var(--editorial-mixed);
@@ -399,30 +402,36 @@
 }
 .interests-theater-caption .is-foreign { font-style: italic; }
 
-.interests-new-things-wall {
-  position: relative;
-  align-self: center;
-  width: 100%;
-  height: min(60svh, 540px);
+.interests-new-things-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  margin: 0;
 }
-.interests-new-things-group { position: absolute; margin: 0; }
-.interests-new-things-frame { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
+.interests-new-things-group-whale { grid-column: span 2; flex-direction: row; flex-wrap: wrap; align-content: center; align-items: flex-start; column-gap: 3%; }
+.interests-new-things-group-snorkeling { grid-column: 5; }
+.interests-new-things-group:nth-child(3n + 2) { align-self: start; }
+.interests-new-things-group:nth-child(4n + 1) { align-self: end; }
+.interests-new-things-frame {
+  display: block;
+  width: min(100%, calc(var(--wall-photo-height) * var(--photo-ratio)));
+  aspect-ratio: var(--photo-ratio);
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: zoom-in;
+}
 .interests-new-things-photo {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
 }
-.interests-new-things-group-skydiving { left: .5%; top: 8%; width: 18%; }
-.interests-new-things-group-pottery { left: 23%; top: 0; width: 12%; }
-.interests-new-things-group-whale { left: 41%; top: 7%; width: 29%; display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 3.5%; }
-.interests-new-things-frame-whale-0 { width: 58.6%; }
-.interests-new-things-frame-whale-1 { width: 37.9%; margin-top: 7%; }
-.interests-new-things-group-hiking { left: 81%; top: 4%; width: 13%; }
-.interests-new-things-group-dogs { left: 1%; top: 58%; width: 19%; }
-.interests-new-things-group-bread { left: 29%; top: 53%; width: 11.5%; }
-.interests-new-things-group-kayaking { left: 49%; top: 54%; width: 12%; }
-.interests-new-things-group-snorkeling { left: 70%; top: 54%; width: 15%; }
+.interests-new-things-frame-whale-0 { width: 57%; }
+.interests-new-things-frame-whale-1 { width: 35%; margin-top: 4%; }
 .interests-new-things-label {
   display: block;
   width: 100%;

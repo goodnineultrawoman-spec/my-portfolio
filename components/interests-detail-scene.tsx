@@ -10,74 +10,10 @@ type InterestPhoto = (typeof travelPhotos)[number];
 type Direction = 'next' | 'previous';
 const pageTransitionMs = 300;
 
-// Both desktop compositions fit their visual area without cropping photographs.
-const travelPhotoPositions: CSSProperties[] = [
-  { left: '1%', top: '2%', width: '20%' },
-  { left: '25%', top: '5%', width: '20%' },
-  { left: '50%', top: '68%', width: '22%' },
-  { left: '2%', top: '80%', width: '20%' },
-  { left: '76%', top: '6%', width: '22%' },
-  { left: '50%', top: '25%', width: '20%' },
-  { left: '76%', top: '29%', width: '20%' },
-  { left: '2%', top: '41%', width: '20%' },
-  { left: '26%', top: '43%', width: '20%' },
-  { left: '26%', top: '80%', width: '20%' },
-  { left: '50%', top: '1%', width: '22%' },
-  { left: '76%', top: '61%', width: '22%' },
-];
-
-const exhibitionPhotoPositions: CSSProperties[] = [
-  { left: '0%', top: '5%', width: '11.6%' },
-  { left: '14.5%', top: '0%', width: '12.5%' },
-  { left: '29%', top: '7%', width: '11.8%' },
-  { left: '43.5%', top: '3%', width: '12.3%' },
-  { left: '58%', top: '6%', width: '11.7%' },
-  { left: '72.5%', top: '0%', width: '12%' },
-  { left: '86%', top: '4%', width: '10.6%' },
-  { left: '1.5%', top: '51%', width: '12.1%' },
-  { left: '16%', top: '55%', width: '11.4%' },
-  { left: '30%', top: '50%', width: '12.4%' },
-  { left: '44%', top: '52%', width: '10.5%' },
-  { left: '57.5%', top: '56%', width: '12.1%' },
-  { left: '72.5%', top: '51%', width: '11.5%' },
-  { left: '86.5%', top: '55%', width: '12.1%' },
-];
-
-const theaterPhotoPositions: Record<number, CSSProperties> = {
-  1: { left: '15%', top: '0%', width: '8.8%' },
-  2: { left: '60%', top: '35%', width: '9.5%' },
-  3: { left: '16%', top: '71%', width: '12%' },
-  4: { left: '42%', top: '1%', width: '11.6%' },
-  5: { left: '3%', top: '37%', width: '13%' },
-  6: { left: '62%', top: '72%', width: '12%' },
-  7: { left: '0%', top: '2%', width: '11.6%' },
-  8: { left: '24%', top: '34%', width: '9.5%' },
-  9: { left: '70%', top: '0%', width: '11.5%' },
-  10: { left: '32%', top: '69%', width: '8.8%' },
-  11: { left: '84%', top: '6%', width: '11.8%' },
-  12: { left: '0%', top: '72%', width: '12%' },
-  13: { left: '27%', top: '5%', width: '11.8%' },
-  14: { left: '78%', top: '38%', width: '13%' },
-  15: { left: '46%', top: '72%', width: '12%' },
-  16: { left: '79%', top: '74%', width: '13%' },
-  17: { left: '56%', top: '4%', width: '11.5%' },
-  18: { left: '40%', top: '39%', width: '14%' },
-};
-
-// Portraits and landscape scenes share similar visual weight across two loose rows.
-const concertPhotoPositions: CSSProperties[] = [
-  { left: '1%', top: '3%', width: '10%' },
-  { left: '38%', top: '8%', width: '10%' },
-  { left: '58%', top: '54%', width: '10%' },
-  { left: '16%', top: '0%', width: '17%' },
-  { left: '36%', top: '59%', width: '17%' },
-  { left: '73%', top: '52%', width: '18%' },
-  { left: '21%', top: '51%', width: '10%' },
-  { left: '52%', top: '2%', width: '17%' },
-  { left: '75%', top: '7%', width: '10%' },
-  { left: '0%', top: '57%', width: '17%' },
-  { left: '87%', top: '10%', width: '13%' },
-];
+// Each photo keeps its native ratio while the wall constrains its display height.
+function photoRatioStyle(photo: InterestPhoto): CSSProperties {
+  return { '--photo-ratio': photo.width / photo.height } as CSSProperties;
+}
 
 function TravelMap() {
   return <div className="interests-travel-map" onClick={event => event.stopPropagation()}>
@@ -102,7 +38,7 @@ function PhotoField({
       key={photo.src}
       type="button"
       className={`interests-photo interests-taped-photo interests-photo-${index + 1}`}
-      style={kind === 'travel' ? travelPhotoPositions[index] : exhibitionPhotoPositions[index]}
+      style={photoRatioStyle(photo)}
       aria-label={`放大${photo.alt}`}
       onClick={event => onOpen(photo, event.currentTarget)}
     ><img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/></button>)}
@@ -114,9 +50,8 @@ function TheaterWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLB
     {theaterPhotos.map(photo => <figure
       key={photo.src}
       className={`interests-theater-item interests-theater-item-${photo.id}`}
-      style={theaterPhotoPositions[photo.id]}
     >
-      <button type="button" className="interests-theater-photo interests-taped-photo" aria-label={`放大${photo.alt}`} onClick={event => onOpen(photo, event.currentTarget)}>
+      <button type="button" className="interests-theater-photo interests-taped-photo" style={photoRatioStyle(photo)} aria-label={`放大${photo.alt}`} onClick={event => onOpen(photo, event.currentTarget)}>
         <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/>
       </button>
       <figcaption className="interests-theater-caption type-meta-text"><span className={photo.foreign ? 'is-foreign' : undefined}>{photo.title}</span> / {photo.place}</figcaption>
@@ -126,11 +61,11 @@ function TheaterWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLB
 
 function ConcertWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLButtonElement) => void }) {
   return <div className="interests-photo-field-concerts" aria-label="演唱会照片" onClick={event => event.stopPropagation()}>
-    {concertPhotos.map((photo, index) => <button
+    {concertPhotos.map(photo => <button
       key={photo.src}
       type="button"
       className="interests-photo interests-taped-photo"
-      style={concertPhotoPositions[index]}
+      style={photoRatioStyle(photo)}
       aria-label="放大演唱会照片"
       onClick={event => onOpen(photo, event.currentTarget)}
     ><img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" draggable={false}/></button>)}
@@ -140,7 +75,7 @@ function ConcertWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLB
 function NewThingsWall({ onOpen }: { onOpen: (photo: InterestPhoto, trigger: HTMLButtonElement) => void }) {
   return <div className="interests-new-things-wall" aria-label="尝试新鲜事的照片" onClick={event => event.stopPropagation()}>
     {newThingsActivities.map(activity => <figure key={activity.id} className={`interests-new-things-group interests-new-things-group-${activity.id}`}>
-      {activity.photos.map((photo, index) => <button key={photo.src} type="button" className={`interests-new-things-frame interests-new-things-frame-${activity.id}-${index} interests-taped-photo`} aria-label={`放大${activity.label}照片`} onClick={event => onOpen(photo, event.currentTarget)}>
+      {activity.photos.map((photo, index) => <button key={photo.src} type="button" className={`interests-new-things-frame interests-new-things-frame-${activity.id}-${index} interests-taped-photo`} style={photoRatioStyle(photo)} aria-label={`放大${activity.label}照片`} onClick={event => onOpen(photo, event.currentTarget)}>
         <img
           className="interests-new-things-photo"
           src={photo.src}
