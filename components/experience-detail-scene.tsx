@@ -76,13 +76,13 @@ export function ExperienceDetailScene() {
   function toggle(id: ExperienceId, trigger: HTMLButtonElement) {
     lastTriggerRef.current = trigger;
     const isDesktop = window.matchMedia('(min-width: 851px)').matches;
-    const nextId = isDesktop ? id : activeId === id ? null : id;
+    const nextId = window.matchMedia('(max-width: 700px)').matches ? id : isDesktop ? id : activeId === id ? null : id;
     setActiveId(nextId);
     if (nextId) requestAnimationFrame(() => {
       const detail = detailRefs.current[nextId];
       detail?.scrollIntoView({
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        block: isDesktop ? 'start' : 'nearest',
+        block: isDesktop || window.matchMedia('(max-width: 700px)').matches ? 'start' : 'nearest',
       });
       if (isDesktop) detail?.focus({ preventScroll: true });
     });
@@ -130,7 +130,6 @@ export function ExperienceDetailScene() {
       <h1 ref={headingRef} tabIndex={-1} className="type-page-title detail-heading-english">EXPERIENCE</h1>
       <p className="detail-heading-chinese">实习经历</p>
       <p className="detail-heading-guide">沿着轨道，看看我的经历 →</p>
-      <span className="experience-mobile-only">Along the way</span>
     </header>
 
     <section className={`experience-stage${activeId ? ' is-detail-open' : ''}`} aria-label="过山车与两段实习经历">
@@ -147,6 +146,7 @@ export function ExperienceDetailScene() {
           key={`point-${item.id}`}
           type="button"
           className={`experience-node${activeId === item.id ? ' is-active' : ''}${previewId === item.id ? ' is-preview' : ''}`}
+          data-number={item.number}
           style={pointStyle(item.point)}
           aria-label={`查看 ${item.company} 详细经历`}
           aria-controls={`experience-${item.id}`}
@@ -189,7 +189,7 @@ export function ExperienceDetailScene() {
           onClick={event => toggle(item.id, event.currentTarget)}
         >
           <span className="experience-note-number">{item.number}</span>
-          <span className="experience-note-copy"><span className="experience-note-company">{item.company}</span><span className="experience-note-meta">{item.role} · {item.period}</span><span className="experience-note-summary">{renderEmphasis(item.summary, item.summaryEmphasis, `${item.id}-summary`)}</span></span>
+          <span className="experience-note-copy"><span className="experience-note-company">{item.company}</span><span className="experience-note-meta">{item.role}</span><span className="experience-note-meta">{item.period}</span><span className="experience-note-summary">{renderEmphasis(item.summary, item.summaryEmphasis, `${item.id}-summary`)}</span></span>
         </button>)}
       </div>
       </div>
@@ -203,7 +203,7 @@ export function ExperienceDetailScene() {
           tabIndex={-1}
           aria-labelledby={`experience-title-${item.id}`}
         >
-          {activeId === item.id && <button type="button" className="experience-return" onClick={returnToOverview}>← 返回 Experience</button>}
+          {activeId === item.id && <button type="button" className="experience-return" onClick={returnToOverview}><span className="mobile-hide">← 返回 Experience</span><span className="mobile-only">← 返回实习经历</span></button>}
           <p className="experience-expanded-number">{item.number} / Experience</p>
           <h2 id={`experience-title-${item.id}`} className="type-section-title">{item.company}</h2>
           <p className="experience-expanded-meta">{item.role}｜{item.period}</p>

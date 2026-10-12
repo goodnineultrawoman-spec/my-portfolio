@@ -276,6 +276,7 @@ export function InterestsDetailScene() {
       </div>
     </section>
     {activeInterestIndex !== null && <section ref={focusBackdropRef} className="interests-focus-backdrop" aria-label="兴趣内容" onClick={handleFocusBackdropClick}>
+      <button type="button" className="mobile-only mobile-interest-return" onClick={event => { event.stopPropagation(); closeInterest(); }}>← 返回兴趣爱好</button>
       <div className="interests-focus-stage">
         {leavingInterestIndex !== null && <InterestPage
           index={leavingInterestIndex}
@@ -308,6 +309,7 @@ export function InterestsDetailScene() {
       onClick={event => { event.stopPropagation(); if (event.target === event.currentTarget) closeLightbox(); }}
     >
       <div ref={lightboxRef} className="interests-lightbox-image" role="dialog" aria-modal="true" aria-label={lightboxPhoto.alt} tabIndex={-1} onClick={event => event.stopPropagation()}>
+        <button type="button" className="mobile-only mobile-overlay-close" aria-label="关闭放大照片" onClick={closeLightbox}>×</button>
         <img src={lightboxPhoto.src} alt={lightboxPhoto.alt} width={lightboxPhoto.width} height={lightboxPhoto.height} decoding="async"/>
       </div>
     </div>}

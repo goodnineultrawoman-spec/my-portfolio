@@ -257,7 +257,7 @@
 @media (min-width: 701px) {
   .map-home { background: #f8f5f1; }
   .map-home .map-canvas { z-index: 3; background: transparent; }
-  .map-home .map-canvas > .map-environment,
+  .map-home .map-canvas .map-environment,
   .map-home .map-canvas .map-facility > .map-facility-original { visibility: hidden; }
   .map-home .map-fold-intro {
     position: absolute;
@@ -521,7 +521,7 @@
     filter: blur(2px);
     animation: welcome-map-impression 1.5s ease-in-out both;
   }
-  .homepage-intro-play .map-home.is-intro-folding .map-canvas > .map-environment,
+  .homepage-intro-play .map-home.is-intro-folding .map-canvas .map-environment,
   .homepage-intro-play .map-home.is-intro-folding .map-canvas .map-facility > .map-facility-original {
     visibility: visible;
   }

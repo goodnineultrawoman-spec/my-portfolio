@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react';
 import { carouselChapters, type CarouselChapter } from '@/data/carousel-chapters';
 import { CarouselArtwork } from '@/components/carousel-artwork';
+import { usePhoneLayout } from '@/hooks/use-phone-layout';
 
 type ChapterId = CarouselChapter['id'];
 
 export function CarouselDetailScene() {
+  const phone = usePhoneLayout();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [direction, setDirection] = useState<'next' | 'previous'>('next');
   const [previewId, setPreviewId] = useState<ChapterId | null>(null);
@@ -22,8 +24,11 @@ export function CarouselDetailScene() {
     if (activeIndex === null) return;
     const previousId = carouselChapters[activeIndex].id;
     setActiveIndex(null);
-    requestAnimationFrame(() => document.getElementById(`chapter-trigger-${previousId}`)?.focus({ preventScroll: true }));
-  }, [activeIndex]);
+    requestAnimationFrame(() => {
+      document.getElementById(`chapter-trigger-${previousId}`)?.focus({ preventScroll: true });
+      if (phone) document.querySelector('.about-detail .detail-stage')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+    });
+  }, [activeIndex, phone]);
 
   const navigate = useCallback((step: -1 | 1) => {
     if (activeIndex === null) return;
@@ -31,8 +36,11 @@ export function CarouselDetailScene() {
     if (next < 0 || next >= carouselChapters.length) return;
     setDirection(step === 1 ? 'next' : 'previous');
     setActiveIndex(next);
-    requestAnimationFrame(() => document.querySelector('.about-detail .detail-directory')?.scrollTo({ top: 0 }));
-  }, [activeIndex]);
+    requestAnimationFrame(() => {
+      if (phone) document.getElementById(`chapter-trigger-${carouselChapters[next].id}`)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+      else document.querySelector('.about-detail .detail-directory')?.scrollTo({ top: 0 });
+    });
+  }, [activeIndex, phone]);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -50,7 +58,7 @@ export function CarouselDetailScene() {
     if (activeIndex === index) { closeChapter(); return; }
     setDirection('next');
     setActiveIndex(index);
-    if (fromHorse) {
+    if (fromHorse || phone) {
       requestAnimationFrame(() => {
         const button = document.getElementById(`chapter-trigger-${id}`);
         if (!button) return;
@@ -100,7 +108,6 @@ export function CarouselDetailScene() {
       <h1 ref={headingRef} tabIndex={-1} className="type-page-title detail-heading-english">ABOUT ME</h1>
       <p className="detail-heading-chinese">关于我</p>
       <p className="detail-heading-guide">点点木马，认识我一下 →</p>
-      <span className="about-mobile-only">四个章节，随时翻阅</span>
     </header>
     <section className="detail-stage" aria-label="旋转木马与关于我的章节">
       <div className="detail-composition">
@@ -134,6 +141,7 @@ export function CarouselDetailScene() {
           </div>
         </div>
         <aside className={`detail-directory${activeIndex !== null ? ' is-focused' : ''}`} aria-label="关于我的四个章节">
+          {activeIndex !== null && <button type="button" className="mobile-only mobile-content-return" onClick={event => { event.stopPropagation(); closeChapter(); }}>← 返回关于我</button>}
           {carouselChapters.map(item => <section
             key={item.id}
             className={`directory-entry${item.id === 'education' ? ' directory-entry-education' : ''}${activeId === item.id ? ' is-active' : ''}${previewId === item.id ? ' is-preview' : ''}`}

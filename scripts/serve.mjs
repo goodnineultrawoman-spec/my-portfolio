@@ -26,7 +26,7 @@ http.createServer((req,res)=>{
    }
   }
  }
- res.writeHead(200,{'Content-Type':contentType,'Content-Length':size,...(path.extname(file)==='.mp3'||path.extname(file)==='.mp4'?{'Accept-Ranges':'bytes'}:{})});
+ res.writeHead(200,{'Content-Type':contentType,'Content-Length':size,...(['.html','.txt'].includes(path.extname(file))?{'Cache-Control':'no-store'}:{}),...(path.extname(file)==='.mp3'||path.extname(file)==='.mp4'?{'Accept-Ranges':'bytes'}:{})});
  if(req.method==='HEAD'){res.end();return;}
  sendFile(file,res);
 }).listen(5173,'127.0.0.1',()=>console.log('Local: http://127.0.0.1:5173'));

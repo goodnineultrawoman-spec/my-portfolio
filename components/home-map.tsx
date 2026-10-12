@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import layout from '@/data/homepage-layout.json';
 import { HomeFacilityArtwork } from '@/components/home-facility-artwork';
+import { usePhoneLayout } from '@/hooks/use-phone-layout';
 
 type Facility = {
   id: string;
@@ -21,6 +22,7 @@ const composition = { width: 1900, height: 1320 };
 const mapOrigin = { x: 150, y: 180 };
 // Three equal paper leaves collapse onto the center leaf during the intro.
 const foldEdges = [0, 1 / 3, 2 / 3, 1];
+const mobileOpeningTiming = { hold: 800, unfold: 3800 };
 
 const facilities: Facility[] = [
   { id: 'carousel', source: '旋转木马', english: 'ABOUT ME', chinese: '关于我', number: '01', noteXY: [34, 945], lineStart: [140, 990], targetRatio: [.52, .9] },
@@ -35,7 +37,20 @@ const facilityHref: Record<string, string> = {
   carousel: '/carousel', coaster: '/experience', ferris: '/ferris-wheel', snack: '/interests', contact: '/contact',
 };
 
+// Percentages share the supplied 941 × 1672 environment coordinate system.
+const mobileStops: Record<string, { x: number; y: number; width: number; label: [number, number]; line: [number, number, number, number] }> = {
+  carousel: { x: 5, y: 21, width: 31, label: [4, 43], line: [19, 43, 22, 40] },
+  coaster: { x: 54, y: 23, width: 40, label: [50, 16.5], line: [68, 22, 73, 25] },
+  ferris: { x: 66, y: 37.5, width: 28, label: [49, 60], line: [65, 61, 79, 55] },
+  snack: { x: 7, y: 60, width: 29, label: [4, 81], line: [17, 81, 22, 78] },
+  contact: { x: 66, y: 78, width: 25, label: [45, 96], line: [63, 96, 77, 94] },
+};
+
 export function HomeMap() {
+  const phone = usePhoneLayout();
+  const [phoneArtReady, setPhoneArtReady] = useState(false);
+  const [mobileIntroPhase, setMobileIntroPhase] = useState<'preparing' | 'unrolling' | 'ready'>('preparing');
+  const mobileOpeningRef = useRef(false);
   const router = useRouter();
   const [activeFacility, setActiveFacility] = useState<string | null>(null);
   const [approachingFacility, setApproachingFacility] = useState<string | null>(null);
@@ -68,6 +83,7 @@ export function HomeMap() {
     let foldFallback: ReturnType<typeof setTimeout> | undefined;
     let awakeningFallback: ReturnType<typeof setTimeout> | undefined;
     let welcomeFallback: ReturnType<typeof setTimeout> | undefined;
+    let phoneReadyFrame: number | undefined;
     const foldPanel = mapScrollRef.current?.querySelector('.map-fold-panel-3');
     const lastAwakening = mapScrollRef.current?.querySelector('.map-fold-facility-contact .map-fold-facility-art');
 
@@ -134,17 +150,63 @@ export function HomeMap() {
       setIntroPhase('ready');
       setLiving(true);
     } else {
-      setShowWelcome(false);
-      setIntroPhase('ready');
+      root.classList.remove('homepage-intro-play');
+      mobileOpeningRef.current = !hasPlayedOpening && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      phoneReadyFrame = requestAnimationFrame(() => {
+        setShowWelcome(false);
+        if (!mobileOpeningRef.current) {
+          setMobileIntroPhase('ready');
+          setIntroPhase('ready');
+          setLiving(true);
+          try { sessionStorage.setItem('openingPlayed', 'true'); } catch { /* Keep the map usable without storage. */ }
+        }
+      });
     }
 
     return () => {
       cancelled = true;
       root.classList.remove('homepage-intro-play');
       if (welcomeFallback) clearTimeout(welcomeFallback);
+      if (phoneReadyFrame !== undefined) cancelAnimationFrame(phoneReadyFrame);
       if (approachTimerRef.current) clearTimeout(approachTimerRef.current);
     };
   }, []);
+
+  const finishMobileOpening = useCallback(() => {
+    mobileOpeningRef.current = false;
+    setMobileIntroPhase('ready');
+    setIntroPhase('ready');
+    setLiving(true);
+    try { sessionStorage.setItem('openingPlayed', 'true'); } catch { /* Keep the map usable without storage. */ }
+  }, []);
+
+  useEffect(() => {
+    if (mobileIntroPhase !== 'unrolling') return;
+    // Covers interrupted animation events without enabling interactions during the reveal.
+    const fallback = setTimeout(finishMobileOpening, mobileOpeningTiming.hold + mobileOpeningTiming.unfold + 250);
+    return () => clearTimeout(fallback);
+  }, [mobileIntroPhase, finishMobileOpening]);
+
+  useEffect(() => {
+    if (!phone) return;
+    let cancelled = false;
+    let readyFrame: number | undefined;
+    const sources = new Set(Array.from(mapScrollRef.current?.querySelectorAll('.map-canvas img[src], .map-canvas image[href]') ?? [])
+      .map(element => element instanceof HTMLImageElement ? element.currentSrc || element.src : element.getAttribute('href'))
+      .filter((src): src is string => Boolean(src)));
+    sources.add('/assets/homepage/environment-mobile.png');
+    void Promise.allSettled([
+      ...Array.from(sources, src => { const image = new Image(); image.src = src; return image.decode(); }),
+      document.fonts.ready,
+    ]).then(() => {
+      if (cancelled) return;
+      setPhoneArtReady(true);
+      readyFrame = requestAnimationFrame(() => {
+        if (!cancelled && mobileOpeningRef.current) setMobileIntroPhase('unrolling');
+      });
+    });
+    return () => { cancelled = true; if (readyFrame !== undefined) cancelAnimationFrame(readyFrame); };
+  }, [phone]);
 
   useEffect(() => {
     const updateVisibility = () => document.documentElement.classList.toggle('homepage-hidden', document.hidden);
@@ -198,7 +260,7 @@ export function HomeMap() {
     onClick: (event: MouseEvent<HTMLAnchorElement>) => approach(event, id),
   });
 
-  return <main className={`map-home${living ? ' is-living' : ''}${approachingFacility ? ' is-approaching' : ''} is-intro-${introPhase}`}>
+  return <main className={`map-home${living ? ' is-living' : ''}${phoneArtReady ? ' is-mobile-art-ready' : ''}${approachingFacility ? ' is-approaching' : ''} is-intro-${introPhase} is-mobile-intro-${mobileIntroPhase}`}>
     {showWelcome && <div className="welcome-intro" aria-hidden="true">
       <div className="welcome-intro-group">
         <span className="welcome-intro-line"/>
@@ -210,25 +272,38 @@ export function HomeMap() {
       <img className="map-home-portrait" src="/assets/homepage/portrait-watermark.png" alt="" aria-hidden="true" draggable={false}/>
       <h1><span className="map-home-name-desktop"><span className="map-home-name-english">Violeta Hao</span><span className="map-home-name-chinese">郝天娇</span></span><span className="map-home-name-mobile">Tianjiao Hao</span></h1>
       <p className="map-home-cover-subtitle">My little wonderland — made of things I’ve created, places I’ve been, and things I love.</p>
-      <p className="map-home-mobile-role">Global Marketing · Brand · GTM</p>
       <div className="map-home-corner">
         <span id="home-music-control" className="map-home-music-slot"/>
         <p className="map-home-hint"><span className="map-home-hint-mobile">在地图里，选一处慢慢逛</span></p>
       </div>
     </header>
-    <div className="map-composition">
+    <div className="map-composition" style={{
+      '--mobile-open-delay': `${mobileOpeningTiming.hold}ms`,
+      '--mobile-open-duration': `${mobileOpeningTiming.unfold}ms`,
+    } as CSSProperties} inert={phone && mobileIntroPhase !== 'ready'} onAnimationEnd={event => {
+      if (event.target === mapScrollRef.current && event.animationName === 'mobile-map-unroll') finishMobileOpening();
+    }}>
       <div className="map-scroll" ref={mapScrollRef}>
         <div className="map-canvas" id="park-map" aria-label="手绘游园地图，五个设施分别为独立图层">
-          <img className="map-environment" src="/assets/homepage/environment-base.png" alt="游园地图的水面、小桥、树木和小径" draggable={false}/>
+          <picture>
+            <source media="(max-width: 700px)" srcSet="/assets/homepage/environment-mobile.png"/>
+            <img className="map-environment" src="/assets/homepage/environment-base.png" alt="游园地图的水面、小桥、树木和小径" draggable={false}/>
+          </picture>
           {layout.layers_bottom_to_top.map(layer => {
             const facility = facilityBySource[layer.name];
+            const stop = mobileStops[facility.id];
             const style = {
               left: `${layer.destination_xy[0] / layout.canvas.width * 100}%`,
               top: `${layer.destination_xy[1] / layout.canvas.height * 100}%`,
               width: `${layer.destination_size[0] / layout.canvas.width * 100}%`,
               height: `${layer.destination_size[1] / layout.canvas.height * 100}%`,
-            };
-            const image = <img className="map-facility-original" src={`/assets/homepage/${layer.file.split('/').at(-1)}`} alt="" draggable={false}/>;
+              '--mobile-left': `${stop.x}%`, '--mobile-top': `${stop.y}%`, '--mobile-width': `${stop.width}%`,
+            } as CSSProperties;
+            const src = `/assets/homepage/${layer.file.split('/').at(-1)}`;
+            const image = <>
+              <img className="map-facility-original" src={src} alt="" draggable={false}/>
+              {phone && facility.id !== 'contact' && <span className="mobile-map-art"><HomeFacilityArtwork id={facility.id} src={src} living={living && phoneArtReady}/></span>}
+            </>;
             const className = `map-facility map-facility-${facility.id}${activeFacility === facility.id || approachingFacility === facility.id ? ' is-active' : ''}${approachingFacility === facility.id ? ' is-approaching' : ''}`;
             if (facility.id === 'carousel') return <Link key={facility.id} ref={carouselRef} href="/carousel" className={className} style={style} aria-label="进入旋转木马 · About" {...interaction(facility.id)}>{image}</Link>;
             if (facility.id === 'coaster') return <Link key={facility.id} ref={coasterRef} href="/experience" className={className} style={style} aria-label="进入过山车 · Experience" {...interaction(facility.id)}>{image}</Link>;
@@ -275,12 +350,20 @@ export function HomeMap() {
           </g>;
         })}
       </svg>
+      <svg className="map-mobile-connectors" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {facilities.map(facility => {
+          const [x1, y1, x2, y2] = mobileStops[facility.id].line;
+          return <path key={facility.id} d={`M ${x1} ${y1} Q ${(x1 + x2) / 2} ${y1} ${x2} ${y2}`}/>;
+        })}
+      </svg>
       <nav className="map-notes" aria-label="地图章节">
         {facilities.map(facility => {
           const style = {
             left: `${facility.noteXY[0] / composition.width * 100}%`,
             top: `${facility.noteXY[1] / composition.height * 100}%`,
-          };
+            '--mobile-label-left': `${mobileStops[facility.id].label[0]}%`,
+            '--mobile-label-top': `${mobileStops[facility.id].label[1]}%`,
+          } as CSSProperties;
           const className = `map-note map-note-${facility.id}${activeFacility === facility.id || approachingFacility === facility.id ? ' is-active' : ''}`;
           const content = <>
             <span className="map-note-number">{facility.number}</span>
@@ -293,6 +376,7 @@ export function HomeMap() {
           return <Link key={facility.id} href={facilityHref[facility.id]} className={className} style={style} aria-label={`进入${facility.source} · ${facility.english} · ${facility.chinese}`} {...interaction(facility.id)}>{content}</Link>;
         })}
       </nav>
+      {phone && mobileIntroPhase !== 'ready' && <span className="mobile-map-roll-edge" aria-hidden="true"/>}
     </div>
   </main>;
 }

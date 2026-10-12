@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react';
 import { ferrisProjects, photographyAlbums, type FerrisProjectId, type PhotographyAlbumId } from '@/data/ferris-projects';
 import { FerrisWheelArtwork } from '@/components/ferris-wheel-artwork';
+import { usePhoneLayout } from '@/hooks/use-phone-layout';
 
 export function FerrisDetailScene() {
+  const phone = usePhoneLayout();
   const [activeId, setActiveId] = useState<FerrisProjectId | null>(null);
   const [closingId, setClosingId] = useState<FerrisProjectId | null>(null);
   const [previewId, setPreviewId] = useState<FerrisProjectId | null>(null);
@@ -40,8 +42,11 @@ export function FerrisDetailScene() {
 
   useEffect(() => { headingRef.current?.focus(); }, []);
   useEffect(() => {
-    if (activeId) requestAnimationFrame(() => focusedRef.current?.focus({ preventScroll: true }));
-  }, [activeId]);
+    if (activeId) requestAnimationFrame(() => {
+      focusedRef.current?.focus({ preventScroll: true });
+      if (phone) focusedRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+    });
+  }, [activeId, phone]);
   useEffect(() => {
     if (gallery) requestAnimationFrame(() => galleryRef.current?.focus({ preventScroll: true }));
   }, [gallery]);
@@ -224,6 +229,7 @@ export function FerrisDetailScene() {
             aria-label={displayedProject.overviewTitle}
             onClick={event => event.stopPropagation()}
           >
+            <button type="button" className="mobile-only mobile-content-return" onClick={closeProject}>← 返回我的作品</button>
             <div className="ferris-focused-layout">
               {displayedProject.image && <figure className="ferris-project-media">
                 <img src={displayedProject.image.src} alt={displayedProject.image.alt} loading="lazy"/>
@@ -270,6 +276,7 @@ export function FerrisDetailScene() {
       if (event.target === event.currentTarget) closeGallery();
     }}>
       <div ref={galleryRef} role="dialog" aria-modal="true" aria-label={album.chinese + '摄影作品集'} tabIndex={-1} className="work-gallery-shell" onClick={event => event.stopPropagation()}>
+        <button type="button" className="mobile-only mobile-overlay-close" aria-label="关闭摄影作品集" onClick={closeGallery}>×</button>
         <div className="work-gallery-heading">
           <span>{album.english} <small>{album.chinese}</small></span>
           <span>{String(photoIndex + 1).padStart(2, '0')} / {String(album.images.length).padStart(2, '0')}</span>
