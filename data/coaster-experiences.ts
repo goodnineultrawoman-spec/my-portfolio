@@ -97,7 +97,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '累计推动上线 27 支推广视频，实现单赞成本 < ¥0.5、爆文率 25%，其中 3 支破万赞、1 支破 10 万赞。',
         ],
         emphasis: ['27 支推广视频', '< ¥0.5', '25%', '3 支破万赞', '1 支破 10 万赞'],
-        illustrations: [{ file: 'pixel-punk/01-creator-campaign.webp', alt: '跟踪趋势和筛选达人，协商报价、定制脚本并跟进上线。共上线 27 支推广视频，单赞成本低于 0.5 元。' }],
+        illustrations: [{ file: 'pixel-punk/01-creator-campaign-v2.webp', alt: '跟踪趋势和筛选达人，协商报价、定制脚本并跟进上线。共上线 27 支推广视频，单赞成本低于 0.5 元。' }],
       },
       {
         number: '02',
@@ -107,7 +107,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '投放期间，墨西哥市场下载量增长约 3 倍。',
         ],
         emphasis: ['约 3 倍'],
-        illustrations: [{ file: 'pixel-punk/02-market-performance.webp', alt: '对比市场、达人与内容的投放表现，优先追加投放到西语区转化效率较高的达人类型。投放期间墨西哥市场下载量增长约 3 倍。' }],
+        illustrations: [{ file: 'pixel-punk/02-market-performance-v2.webp', alt: '对比市场、达人与内容的投放表现，优先追加投放到西语区转化效率较高的达人类型。投放期间墨西哥市场下载量增长约 3 倍。' }],
       },
       {
         number: '03',
