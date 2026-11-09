@@ -199,7 +199,7 @@ export function ExperienceDetailScene() {
           id={`experience-${item.id}`}
           key={item.id}
           ref={element => { detailRefs.current[item.id] = element; }}
-          className={`experience-expanded experience-detail-article${activeId === item.id ? ' is-active' : ''}`}
+          className={`experience-expanded experience-detail-article${item.id === 'baidu' ? ' experience-expanded--illustrated' : ''}${activeId === item.id ? ' is-active' : ''}`}
           tabIndex={-1}
           aria-labelledby={`experience-title-${item.id}`}
         >
@@ -209,14 +209,31 @@ export function ExperienceDetailScene() {
           <p className="experience-expanded-meta">{item.role}｜{item.period}</p>
           <p className="experience-introduction type-body-text">{item.introduction}</p>
           <div className="experience-detail-sections">
-            {item.sections.map(section => <article className="experience-detail-section" key={section.number}>
-              <header className="experience-detail-section-heading">
+            {item.sections.map(section => {
+              const heading = <header className="experience-detail-section-heading">
                 <span className="experience-detail-section-number">{section.number}</span>
                 <h3 className="type-primary-text">{section.title}</h3>
-              </header>
-              {section.paragraphs?.map((paragraph, index) => <p className="type-body-text" key={index}>{renderEmphasis(paragraph, section.emphasis ?? [], `${item.id}-${section.number}-${index}`)}</p>)}
-              {section.links && <div className="experience-links">{section.links.map(link => <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>{link.label} ↗</a>)}</div>}
-            </article>)}
+              </header>;
+              const paragraphs = section.paragraphs?.map((paragraph, index) => <p className="type-body-text" key={index}>{renderEmphasis(paragraph, section.emphasis ?? [], `${item.id}-${section.number}-${index}`)}</p>);
+
+              if (section.illustrations) {
+                return <article className="experience-detail-section experience-detail-section--illustrated" key={section.number}>
+                  {section.illustrations.map(({ file, alt }, index, images) => <div className="experience-illustrated-row" key={file}>
+                    <div className="experience-illustrated-copy">
+                      {index === 0 && heading}
+                      {images.length === 1 ? paragraphs : paragraphs?.[index]}
+                    </div>
+                    <img className="experience-illustration" src={`/assets/coaster-detail/keevx/${file}`} alt={alt} width={1672} height={941} loading="lazy" decoding="async"/>
+                  </div>)}
+                </article>;
+              }
+
+              return <article className="experience-detail-section" key={section.number}>
+                {heading}
+                {paragraphs}
+                {section.links && <div className="experience-links">{section.links.map(link => <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.href}>{link.label} ↗</a>)}</div>}
+              </article>;
+            })}
           </div>
         </section>)}
       </div>

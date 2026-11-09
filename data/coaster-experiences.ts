@@ -3,6 +3,7 @@ export type ExperienceSection = {
   title: string;
   paragraphs?: string[];
   emphasis?: string[];
+  illustrations?: { file: string; alt: string }[];
   links?: { label: string; href: string }[];
 };
 
@@ -40,6 +41,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '增长期识别出 AI 工具站获客成本优于 SEM（$0.7 vs $2.1 / 注册用户），推动资源向该渠道倾斜，并规模化拓展至 14 个站点挂链。实习期间产品累计注册用户超过 34,000。',
         ],
         emphasis: ['$0.7 vs $2.1 / 注册用户', '14 个站点挂链', '34,000'],
+        illustrations: [{ file: '01-channel-acquisition.webp', alt: '对比工具站与 SEM 的注册成本后，将资源转向工具站，拓展至 14 个挂链站点。' }],
       },
       {
         number: '02',
@@ -49,6 +51,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '推动支付宝支付、首页入口改版、视频生成邮件通知、西语页面、社媒与 Discord 入口等 6 项需求上线，其中首页入口改版带动转化率 +5.25pp；另有人像音色克隆、图生视频等 3 项需求被采纳并进入排期。',
         ],
         emphasis: ['近千条用户反馈', '百余份问卷', '6 项需求', '+5.25pp', '3 项需求'],
+        illustrations: [{ file: '02-feedback-iteration.webp', alt: '将用户反馈和问卷去重归类，每周提交需求。首页入口改版后，转化率提升 5.25 个百分点。' }],
       },
       {
         number: '03',
@@ -58,6 +61,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '同期西语用户占比从 0 增长至 10%。',
         ],
         emphasis: ['0 增长至 10%'],
+        illustrations: [{ file: '03-spanish-localization.webp', alt: '完成官网和产品的西语本地化，并将墨西哥创作者访谈发现写入产品需求。同期西语用户占比由 0 增至 10%。' }],
       },
       {
         number: '04',
@@ -67,6 +71,10 @@ export const coasterExperiences: CoasterExperience[] = [
           '同时参与企业客户商务会议，负责演示材料制作、全英文产品讲解及现场答疑，并在会后整理客户需求与会议复盘。',
         ],
         emphasis: ['110 万播放', '4.7 万互动'],
+        illustrations: [
+          { file: '04-creator-marketing.webp', alt: '从创作者筛选、对接合作和提供素材，到发布后分析评论和数据。' },
+          { file: '05-b2b-demo.webp', alt: '会前准备演示材料，会中进行英文演示与答疑，会后整理客户需求并复盘。' },
+        ],
       },
     ],
   },
