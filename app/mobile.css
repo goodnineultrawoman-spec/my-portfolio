@@ -34,14 +34,14 @@
   .map-home .map-home-header .map-home-hint { display: none; }
   .map-home .map-composition { width: 100%; margin: 0; aspect-ratio: 941 / 1672; container-type: inline-size; }
   /* Reveal the existing map, facilities and labels as one continuous sheet of paper. */
-  .map-home.is-mobile-intro-preparing :is(.map-scroll, .map-notes, .map-mobile-connectors) { clip-path: inset(0 0 calc(100% - 24px)); }
-  .map-home.is-mobile-intro-unrolling :is(.map-scroll, .map-notes, .map-mobile-connectors) {
+  .map-home.is-mobile-intro-preparing:not(.is-intro-ready) :is(.map-scroll, .map-notes, .map-mobile-connectors) { clip-path: inset(0 0 calc(100% - 24px)); }
+  .map-home.is-mobile-intro-unrolling:not(.is-intro-ready) :is(.map-scroll, .map-notes, .map-mobile-connectors) {
     animation: mobile-map-unroll var(--mobile-open-duration) cubic-bezier(.42, 0, .28, 1) var(--mobile-open-delay) both;
     will-change: clip-path;
   }
-  .map-home:not(.is-mobile-intro-ready) .map-composition { pointer-events: none; }
-  .map-home:not(.is-mobile-intro-ready) .mobile-map-art * { animation-play-state: paused; }
-  .map-home:not(.is-mobile-intro-ready) .map-facility-contact > .map-facility-original { animation-play-state: paused; }
+  .map-home:not(.is-intro-ready) .map-composition { pointer-events: none; }
+  .map-home:not(.is-intro-ready) .mobile-map-art * { animation-play-state: paused; }
+  .map-home:not(.is-intro-ready) .map-facility-contact > .map-facility-original { animation-play-state: paused; }
   .map-home .mobile-map-roll-edge {
     display: block; position: absolute; z-index: 8; left: 18px; right: 18px; top: 24px;
     height: 36px; transform: translateY(-100%); pointer-events: none;
@@ -121,7 +121,6 @@
   .map-home .map-note-subtitle { font-size: 11px; line-height: 1.4; }
   .map-home .map-mobile-connectors { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .map-mobile-connectors path { stroke: #ad9080; stroke-width: .65px; vector-effect: non-scaling-stroke; fill: none; opacity: .7; }
-  .map-home .map-home-music-slot .bgm-toggle { top: max(14px, env(safe-area-inset-top)); right: max(9px, env(safe-area-inset-right)); }
 
   main.carousel-detail {
     padding: max(16px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) max(86px, calc(62px + env(safe-area-inset-bottom))) max(22px, env(safe-area-inset-left));

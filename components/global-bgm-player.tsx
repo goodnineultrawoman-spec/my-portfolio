@@ -1,28 +1,15 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import './global-bgm-player.css';
 
 const targetVolume = 0.15;
 
 export function GlobalBgmPlayer() {
-  const pathname = usePathname();
   const audioRef = useRef<HTMLAudioElement>(null);
   const toggleRef = useRef<(() => void) | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showHint, setShowHint] = useState(true);
-  const [homeControlHost, setHomeControlHost] = useState<HTMLElement | null>(null);
-
-  useLayoutEffect(() => {
-    setHomeControlHost(pathname === '/' ? document.getElementById('home-music-control') : null);
-  }, [pathname]);
-
-  useEffect(() => {
-    const timeout = window.setTimeout(() => setShowHint(false), 5000);
-    return () => window.clearTimeout(timeout);
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -81,7 +68,9 @@ export function GlobalBgmPlayer() {
     };
   }, []);
 
-  const button = <button
+  return <>
+    <audio ref={audioRef} src="/audio/paper-moon.mp3" loop preload="none"/>
+    <button
       type="button"
       className={`bgm-toggle${isPlaying ? ' is-playing' : ''}`}
       aria-label={isPlaying ? 'Turn background music off' : 'Turn background music on'}
@@ -92,11 +81,8 @@ export function GlobalBgmPlayer() {
       }}
     >
       <span className="bgm-toggle-note" aria-hidden="true">♪</span>
-      {showHint && <span className="bgm-toggle-hint" aria-hidden="true">点这里播放音乐</span>}
-    </button>;
-
-  return <>
-    <audio ref={audioRef} src="/audio/paper-moon.mp3" loop preload="none"/>
-    {homeControlHost ? createPortal(button, homeControlHost) : button}
+      <span className="bgm-toggle-label" aria-hidden="true">Music {isPlaying ? 'On' : 'Off'}</span>
+      {showHint && <span className="bgm-toggle-hint" aria-hidden="true">点这里播放音乐～</span>}
+    </button>
   </>;
 }

@@ -188,7 +188,10 @@ export function HomeMap() {
   }, [mobileIntroPhase, finishMobileOpening]);
 
   useEffect(() => {
-    if (!phone) return;
+    if (!phone) {
+      if (mobileOpeningRef.current && window.matchMedia('(min-width: 701px)').matches) finishMobileOpening();
+      return;
+    }
     let cancelled = false;
     let readyFrame: number | undefined;
     const sources = new Set(Array.from(mapScrollRef.current?.querySelectorAll('.map-canvas img[src], .map-canvas image[href]') ?? [])
@@ -206,7 +209,7 @@ export function HomeMap() {
       });
     });
     return () => { cancelled = true; if (readyFrame !== undefined) cancelAnimationFrame(readyFrame); };
-  }, [phone]);
+  }, [phone, finishMobileOpening]);
 
   useEffect(() => {
     const updateVisibility = () => document.documentElement.classList.toggle('homepage-hidden', document.hidden);
@@ -273,14 +276,13 @@ export function HomeMap() {
       <h1><span className="map-home-name-desktop"><span className="map-home-name-english">Violeta Hao</span><span className="map-home-name-chinese">郝天娇</span></span><span className="map-home-name-mobile">Tianjiao Hao</span></h1>
       <p className="map-home-cover-subtitle">My little wonderland — made of things I’ve created, places I’ve been, and things I love.</p>
       <div className="map-home-corner">
-        <span id="home-music-control" className="map-home-music-slot"/>
         <p className="map-home-hint"><span className="map-home-hint-mobile">在地图里，选一处慢慢逛</span></p>
       </div>
     </header>
     <div className="map-composition" style={{
       '--mobile-open-delay': `${mobileOpeningTiming.hold}ms`,
       '--mobile-open-duration': `${mobileOpeningTiming.unfold}ms`,
-    } as CSSProperties} inert={phone && mobileIntroPhase !== 'ready'} onAnimationEnd={event => {
+    } as CSSProperties} inert={phone && introPhase !== 'ready'} onAnimationEnd={event => {
       if (event.target === mapScrollRef.current && event.animationName === 'mobile-map-unroll') finishMobileOpening();
     }}>
       <div className="map-scroll" ref={mapScrollRef}>
@@ -376,7 +378,7 @@ export function HomeMap() {
           return <Link key={facility.id} href={facilityHref[facility.id]} className={className} style={style} aria-label={`进入${facility.source} · ${facility.english} · ${facility.chinese}`} {...interaction(facility.id)}>{content}</Link>;
         })}
       </nav>
-      {phone && mobileIntroPhase !== 'ready' && <span className="mobile-map-roll-edge" aria-hidden="true"/>}
+      {phone && introPhase !== 'ready' && <span className="mobile-map-roll-edge" aria-hidden="true"/>}
     </div>
   </main>;
 }

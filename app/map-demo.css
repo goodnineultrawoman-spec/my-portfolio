@@ -42,7 +42,6 @@
 }
 
 .map-home-corner { display: contents; }
-.map-home-music-slot { display: none; }
 .welcome-intro { display: none; }
 
 .map-home-portrait,
@@ -401,7 +400,6 @@
     display: flex;
     align-items: center;
   }
-  .map-home-music-slot { display: flex; align-items: center; justify-content: center; flex: 0 0 52px; min-height: 46px; }
   .map-home-header .map-home-hint { display: none; }
   .map-note-title { letter-spacing: -.015em; }
 }
@@ -1215,7 +1213,6 @@
 }
 
 @media (max-width: 700px) {
-  .map-home-music-slot { display: contents; }
   .map-home { align-items: stretch; padding: 14px 15px 10px; }
   .map-home-header { flex-wrap: wrap; gap: 2px 10px; padding-bottom: 14px; }
   .map-home-header h1 { font-size: 22px; }
