@@ -41,7 +41,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '增长期识别出 AI 工具站获客成本优于 SEM（$0.7 vs $2.1 / 注册用户），推动资源向该渠道倾斜，并规模化拓展至 14 个站点挂链。实习期间产品累计注册用户超过 34,000。',
         ],
         emphasis: ['$0.7 vs $2.1 / 注册用户', '14 个站点挂链', '34,000'],
-        illustrations: [{ file: '01-channel-acquisition.webp', alt: '对比工具站与 SEM 的注册成本后，将资源转向工具站，拓展至 14 个挂链站点。' }],
+        illustrations: [{ file: 'keevx/01-channel-acquisition.webp', alt: '对比工具站与 SEM 的注册成本后，将资源转向工具站，拓展至 14 个挂链站点。' }],
       },
       {
         number: '02',
@@ -51,7 +51,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '推动支付宝支付、首页入口改版、视频生成邮件通知、西语页面、社媒与 Discord 入口等 6 项需求上线，其中首页入口改版带动转化率 +5.25pp；另有人像音色克隆、图生视频等 3 项需求被采纳并进入排期。',
         ],
         emphasis: ['近千条用户反馈', '百余份问卷', '6 项需求', '+5.25pp', '3 项需求'],
-        illustrations: [{ file: '02-feedback-iteration.webp', alt: '将用户反馈和问卷去重归类，每周提交需求。首页入口改版后，转化率提升 5.25 个百分点。' }],
+        illustrations: [{ file: 'keevx/02-feedback-iteration.webp', alt: '将用户反馈和问卷去重归类，每周提交需求。首页入口改版后，转化率提升 5.25 个百分点。' }],
       },
       {
         number: '03',
@@ -61,7 +61,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '同期西语用户占比从 0 增长至 10%。',
         ],
         emphasis: ['0 增长至 10%'],
-        illustrations: [{ file: '03-spanish-localization.webp', alt: '完成官网和产品的西语本地化，并将墨西哥创作者访谈发现写入产品需求。同期西语用户占比由 0 增至 10%。' }],
+        illustrations: [{ file: 'keevx/03-spanish-localization.webp', alt: '完成官网和产品的西语本地化，并将墨西哥创作者访谈发现写入产品需求。同期西语用户占比由 0 增至 10%。' }],
       },
       {
         number: '04',
@@ -72,8 +72,8 @@ export const coasterExperiences: CoasterExperience[] = [
         ],
         emphasis: ['110 万播放', '4.7 万互动'],
         illustrations: [
-          { file: '04-creator-marketing.webp', alt: '从创作者筛选、对接合作和提供素材，到发布后分析评论和数据。' },
-          { file: '05-b2b-demo.webp', alt: '会前准备演示材料，会中进行英文演示与答疑，会后整理客户需求并复盘。' },
+          { file: 'keevx/04-creator-marketing.webp', alt: '从创作者筛选、对接合作和提供素材，到发布后分析评论和数据。' },
+          { file: 'keevx/05-b2b-demo.webp', alt: '会前准备演示材料，会中进行英文演示与答疑，会后整理客户需求并复盘。' },
         ],
       },
     ],
@@ -97,6 +97,7 @@ export const coasterExperiences: CoasterExperience[] = [
           '累计推动上线 27 支推广视频，实现单赞成本 < ¥0.5、爆文率 25%，其中 3 支破万赞、1 支破 10 万赞。',
         ],
         emphasis: ['27 支推广视频', '< ¥0.5', '25%', '3 支破万赞', '1 支破 10 万赞'],
+        illustrations: [{ file: 'pixel-punk/01-creator-campaign.webp', alt: '跟踪趋势和筛选达人，协商报价、定制脚本并跟进上线。共上线 27 支推广视频，单赞成本低于 0.5 元。' }],
       },
       {
         number: '02',
@@ -106,11 +107,13 @@ export const coasterExperiences: CoasterExperience[] = [
           '投放期间，墨西哥市场下载量增长约 3 倍。',
         ],
         emphasis: ['约 3 倍'],
+        illustrations: [{ file: 'pixel-punk/02-market-performance.webp', alt: '对比市场、达人与内容的投放表现，优先追加投放到西语区转化效率较高的达人类型。投放期间墨西哥市场下载量增长约 3 倍。' }],
       },
       {
         number: '03',
         title: '产品本地化',
         paragraphs: ['负责 Loficam、减法相册的西语本地化，根据目标市场的语言及文化习惯调整产品术语与界面文案。'],
+        illustrations: [{ file: 'pixel-punk/03-spanish-localization.webp', alt: '按西语市场的语言习惯调整 Loficam 和减法相册的产品术语及界面文案。' }],
       },
       {
         number: '04',

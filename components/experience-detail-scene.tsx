@@ -199,7 +199,7 @@ export function ExperienceDetailScene() {
           id={`experience-${item.id}`}
           key={item.id}
           ref={element => { detailRefs.current[item.id] = element; }}
-          className={`experience-expanded experience-detail-article${item.id === 'baidu' ? ' experience-expanded--illustrated' : ''}${activeId === item.id ? ' is-active' : ''}`}
+          className={`experience-expanded experience-detail-article${item.sections.some(section => section.illustrations?.length) ? ' experience-expanded--illustrated' : ''}${activeId === item.id ? ' is-active' : ''}`}
           tabIndex={-1}
           aria-labelledby={`experience-title-${item.id}`}
         >
@@ -223,7 +223,7 @@ export function ExperienceDetailScene() {
                       {index === 0 && heading}
                       {images.length === 1 ? paragraphs : paragraphs?.[index]}
                     </div>
-                    <img className="experience-illustration" src={`/assets/coaster-detail/keevx/${file}`} alt={alt} width={1672} height={941} loading="lazy" decoding="async"/>
+                    <img className="experience-illustration" src={`/assets/coaster-detail/${file}`} alt={alt} width={1672} height={941} loading="lazy" decoding="async"/>
                   </div>)}
                 </article>;
               }
