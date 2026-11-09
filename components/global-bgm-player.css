@@ -34,6 +34,20 @@
   white-space: nowrap;
 }
 
+.bgm-toggle-hint {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  padding: 4px 7px;
+  border-radius: 4px;
+  background: var(--background);
+  color: #6b6157;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
 .bgm-toggle:hover,
 .bgm-toggle:focus-visible,
 .bgm-toggle.is-playing { opacity: .94; color: #817e76; }
@@ -43,7 +57,7 @@
 body:has(.map-home) > .bgm-toggle { opacity: 0; pointer-events: none; }
 
 .map-home-music-slot .bgm-toggle {
-  position: static;
+  position: relative;
   min-width: 52px;
   min-height: 38px;
   padding: 0 2px;
@@ -53,7 +67,6 @@ body:has(.map-home) > .bgm-toggle { opacity: 0; pointer-events: none; }
 
 @media (min-width: 701px) {
   .map-home-music-slot .bgm-toggle {
-    position: static;
     min-width: 52px;
     min-height: 46px;
     padding: 0;

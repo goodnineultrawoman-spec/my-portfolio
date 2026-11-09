@@ -6,12 +6,10 @@ import { usePathname } from 'next/navigation';
 import './global-bgm-player.css';
 
 const targetVolume = 0.15;
-const preferenceKey = 'portfolioBgmEnabled';
 
 export function GlobalBgmPlayer() {
   const pathname = usePathname();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const toggleRef = useRef<(() => void) | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [homeControlHost, setHomeControlHost] = useState<HTMLElement | null>(null);
@@ -25,16 +23,9 @@ export function GlobalBgmPlayer() {
     if (!audio) return;
 
     let disposed = false;
-    let userDisabled = false;
-    let playing = false;
+    let wantsPlayback = false;
     let fadeFrame = 0;
-    let fallbackInstalled = false;
-    let fallbackUsed = false;
     let playVersion = 0;
-
-    const savePreference = (enabled: boolean) => {
-      try { sessionStorage.setItem(preferenceKey, String(enabled)); } catch { /* Storage is optional. */ }
-    };
 
     const fadeTo = (volume: number, duration: number, onComplete?: () => void) => {
       cancelAnimationFrame(fadeFrame);
@@ -51,93 +42,40 @@ export function GlobalBgmPlayer() {
       fadeFrame = requestAnimationFrame(step);
     };
 
-    const removeFallback = () => {
-      if (!fallbackInstalled) return;
-      fallbackInstalled = false;
-      for (const type of ['pointerdown', 'click', 'touchstart', 'keydown']) {
-        document.removeEventListener(type, onFirstInteraction, true);
-      }
-    };
-
-    const attemptPlay = (allowFallback: boolean) => {
-      if (disposed || userDisabled || playing) return;
+    const toggle = async () => {
       const version = ++playVersion;
-      audio.volume = 0;
-      let result: Promise<void>;
-      try {
-        result = audio.play();
-      } catch {
-        if (version !== playVersion) return;
-        if (allowFallback) installFallback();
+      if (wantsPlayback) {
+        wantsPlayback = false;
+        setIsPlaying(false);
+        fadeTo(0, 750, () => audio.pause());
         return;
       }
-      void result.then(() => {
-        if (disposed || userDisabled) {
-          audio.pause();
-          return;
-        }
-        if (version !== playVersion) return;
-        playing = true;
+
+      wantsPlayback = true;
+      cancelAnimationFrame(fadeFrame);
+      audio.volume = 0;
+      try {
+        await audio.play();
+        if (disposed || version !== playVersion) return;
         setIsPlaying(true);
-        removeFallback();
         fadeTo(targetVolume, 1250);
-      }).catch(() => {
-        if (disposed || userDisabled || version !== playVersion) return;
+      } catch {
+        if (disposed || version !== playVersion) return;
+        wantsPlayback = false;
         setIsPlaying(false);
-        if (allowFallback) installFallback();
-      });
-    };
-
-    function onFirstInteraction(event: Event) {
-      if (buttonRef.current?.contains(event.target as Node)) return;
-      if (event instanceof KeyboardEvent && (event.key === 'Tab' || event.key === 'Escape')) return;
-      fallbackUsed = true;
-      removeFallback();
-      if (!userDisabled && !playing) attemptPlay(false);
-    }
-
-    function installFallback() {
-      if (fallbackInstalled || fallbackUsed || userDisabled || disposed) return;
-      fallbackInstalled = true;
-      for (const type of ['pointerdown', 'click', 'touchstart', 'keydown']) {
-        document.addEventListener(type, onFirstInteraction, true);
-      }
-    }
-
-    toggleRef.current = () => {
-      if (playing) {
-        ++playVersion;
-        userDisabled = true;
-        playing = false;
-        setIsPlaying(false);
-        savePreference(false);
-        removeFallback();
-        fadeTo(0, 750, () => { if (userDisabled) audio.pause(); });
-      } else {
-        userDisabled = false;
-        savePreference(true);
-        removeFallback();
-        attemptPlay(false);
       }
     };
-
-    try { userDisabled = sessionStorage.getItem(preferenceKey) === 'false'; } catch { /* Default to an autoplay attempt. */ }
-    if (!userDisabled) {
-      installFallback();
-      attemptPlay(true);
-    }
+    toggleRef.current = () => { void toggle(); };
 
     return () => {
       disposed = true;
-      ++playVersion;
       toggleRef.current = null;
-      removeFallback();
       cancelAnimationFrame(fadeFrame);
+      audio.pause();
     };
   }, []);
 
   const button = <button
-      ref={buttonRef}
       type="button"
       className={`bgm-toggle${isPlaying ? ' is-playing' : ''}`}
       aria-label={isPlaying ? 'Turn background music off' : 'Turn background music on'}
@@ -146,10 +84,11 @@ export function GlobalBgmPlayer() {
     >
       <span className="bgm-toggle-note" aria-hidden="true">♪</span>
       <span className="bgm-toggle-label" aria-hidden="true">Music {isPlaying ? 'On' : 'Off'}</span>
+      {!isPlaying && <span className="bgm-toggle-hint" aria-hidden="true">点这里播放音乐哦～</span>}
     </button>;
 
   return <>
-    <audio ref={audioRef} src="/audio/paper-moon.mp3" loop preload="auto"/>
+    <audio ref={audioRef} src="/audio/paper-moon.mp3" loop preload="none"/>
     {homeControlHost ? createPortal(button, homeControlHost) : button}
   </>;
 }
