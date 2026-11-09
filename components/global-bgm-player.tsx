@@ -12,11 +12,17 @@ export function GlobalBgmPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const toggleRef = useRef<(() => void) | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showHint, setShowHint] = useState(true);
   const [homeControlHost, setHomeControlHost] = useState<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
     setHomeControlHost(pathname === '/' ? document.getElementById('home-music-control') : null);
   }, [pathname]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setShowHint(false), 5000);
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -80,11 +86,13 @@ export function GlobalBgmPlayer() {
       className={`bgm-toggle${isPlaying ? ' is-playing' : ''}`}
       aria-label={isPlaying ? 'Turn background music off' : 'Turn background music on'}
       aria-pressed={isPlaying}
-      onClick={() => toggleRef.current?.()}
+      onClick={() => {
+        setShowHint(false);
+        toggleRef.current?.();
+      }}
     >
       <span className="bgm-toggle-note" aria-hidden="true">♪</span>
-      <span className="bgm-toggle-label" aria-hidden="true">Music {isPlaying ? 'On' : 'Off'}</span>
-      {!isPlaying && <span className="bgm-toggle-hint" aria-hidden="true">点这里播放音乐哦～</span>}
+      {showHint && <span className="bgm-toggle-hint" aria-hidden="true">点这里播放音乐</span>}
     </button>;
 
   return <>
