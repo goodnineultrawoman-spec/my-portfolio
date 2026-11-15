@@ -267,14 +267,12 @@ export function HomeMap() {
     {showWelcome && <div className="welcome-intro" aria-hidden="true">
       <div className="welcome-intro-group">
         <span className="welcome-intro-line"/>
-        <p>Welcome to my little wonderland.</p>
         <span className="welcome-intro-line"/>
       </div>
     </div>}
     <header className="map-home-header">
       <img className="map-home-portrait" src="/assets/homepage/portrait-watermark.png" alt="" aria-hidden="true" draggable={false}/>
       <h1><span className="map-home-name-desktop"><span className="map-home-name-english">Violeta Hao</span><span className="map-home-name-chinese">郝天娇</span></span><span className="map-home-name-mobile">Tianjiao Hao</span></h1>
-      <p className="map-home-cover-subtitle">My little wonderland — made of things I’ve created, places I’ve been, and things I love.</p>
       <div className="map-home-corner">
         <p className="map-home-hint"><span className="map-home-hint-mobile">在地图里，选一处慢慢逛</span></p>
       </div>
