@@ -129,6 +129,49 @@
   display: block;
   max-width: 610px;
 }
+main.ferris-detail .ferris-focused-jeju .ferris-focused-layout {
+  display: block;
+  max-width: 650px;
+}
+main.ferris-detail .ferris-focused-jeju .ferris-project-media {
+  position: static;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 24px;
+}
+main.ferris-detail .ferris-focused-jeju .ferris-project-media img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  object-position: center 60%;
+}
+.ferris-focused-jeju .ferris-project-copy { position: relative; }
+.ferris-focused-jeju .ferris-project-number { position: absolute; left: 0; top: 7px; }
+.ferris-focused-jeju .ferris-project-copy h2 {
+  margin: 0;
+  padding-left: 29px;
+  font-family: var(--english);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.ferris-focused-jeju .ferris-project-subtitle { margin-top: 5px; padding-left: 29px; }
+.ferris-focused-jeju .ferris-project-body { margin-top: 24px; }
+.ferris-focused-jeju .ferris-project-body p { margin-bottom: 17px; line-height: 1.95; }
+.ferris-project-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 17px;
+  margin-top: 5px;
+  padding: 4px 0 6px;
+  border-bottom: 1px solid #afb6a7;
+  color: var(--type-accent);
+  font-size: 13px;
+}
+.ferris-project-external-link span { font: 18px var(--english); }
+.ferris-project-external-link:hover { color: #46584d; border-color: #46584d; }
 .ferris-project-media { position: sticky; top: 8px; margin: 0; min-width: 0; }
 .ferris-project-media img {
   display: block;

@@ -1,4 +1,4 @@
-export type FerrisProjectId = 'archiv' | 'research' | 'advertising' | 'photography';
+export type FerrisProjectId = 'archiv' | 'research' | 'advertising' | 'jeju' | 'photography';
 
 export type FerrisProject = {
   id: FerrisProjectId;
@@ -13,6 +13,7 @@ export type FerrisProject = {
   body: string[];
   image?: { src: string; alt: string };
   video?: { src: string; poster: string };
+  externalLink?: { href: string; label: string };
 };
 
 const assetRoot = '/assets/my-work';
@@ -54,7 +55,18 @@ export const ferrisProjects: FerrisProject[] = [
     ],
   },
   {
-    id: 'photography', cabinIndex: 3, number: '04',
+    id: 'jeju', cabinIndex: 3, number: '04',
+    overviewTitle: 'Days in Jeju', overviewSkills: 'Vlog 影像剪辑', overviewYear: '', title: 'Days in Jeju', subtitle: 'Vlog 影像剪辑',
+    image: { src: assetRoot + '/jeju-vlog-cover.jpg', alt: 'Days in Jeju 济州岛旅行影像拼贴封面' },
+    externalLink: { href: 'https://www.bilibili.com/video/BV1tZWB6nErz/', label: '观看完整 Vlog' },
+    body: [
+      '这支 vlog 开始于一次突然的创作冲动。看着别人拍出带有自己审美和情感色彩的 vlog，我也想试着把自己拍下的素材组织起来，从画面的排列、音乐的选择，到字幕和剪辑的节奏，亲手完成一件带有自己表达的作品。',
+      '我想把它剪成一本温暖、文艺的旅行日记。在济州岛，我拍下了许多让我有所感触的画面：沿着海岸走路时不断展开的风景，夜晚让人害怕又忍不住靠近的大海，还有咖啡店店主猜到我们是粉丝后，放起喜欢的歌曲、送来橘子和柿子的瞬间。这些细小的经历，慢慢构成了我对这次旅行的记忆。',
+      '剪辑时，我以旅行的时间顺序为主线，穿插风景、胶片质感的照片，以及写着自己想法的字幕，也加进了一些追星途中的小趣事。我根据不同片段的心情选择音乐，也尝试让文字和画面有些互动：标题的颜色呼应橙子、山峰和大海，雨天的日期像水滴一样从伞沿落下。',
+    ],
+  },
+  {
+    id: 'photography', cabinIndex: 4, number: '05',
     overviewTitle: '摄影作品', overviewSkills: 'Photography · Visual Diary', overviewYear: '2021–Now', title: '摄影作品',
     body: ['我喜欢用相机记录身边的人和去过的地方。大学期间，我为二十多位客人完成过付费人像拍摄，也习惯在旅行中捕捉那些被光线、构图或偶然瞬间吸引的画面。'],
   },

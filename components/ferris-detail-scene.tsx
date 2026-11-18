@@ -216,7 +216,7 @@ export function FerrisDetailScene() {
                 <span className="directory-text">
                   <span className="directory-english">{project.overviewTitle}</span>
                   <span className="directory-meta type-meta-text">{project.overviewSkills}</span>
-                  <span className="directory-year type-meta-text">{project.overviewYear}</span>
+                  {project.overviewYear && <span className="directory-year type-meta-text">{project.overviewYear}</span>}
                 </span>
               </button>
             </section>)}
@@ -248,6 +248,9 @@ export function FerrisDetailScene() {
                 <div className="ferris-project-body">
                   {displayedProject.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
                 </div>
+                {displayedProject.externalLink && <a className="ferris-project-external-link" href={displayedProject.externalLink.href} target="_blank" rel="noopener noreferrer">
+                  {displayedProject.externalLink.label}<span aria-hidden="true">↗</span>
+                </a>}
                 {displayedProject.id === 'photography' && <div className="ferris-albums" aria-label="摄影作品集">
                   {(Object.keys(photographyAlbums) as PhotographyAlbumId[]).map((id, index) => <button
                     key={id}
